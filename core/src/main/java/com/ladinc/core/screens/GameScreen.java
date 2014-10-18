@@ -26,7 +26,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 3;
+	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -92,7 +92,8 @@ public class GameScreen implements Screen {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() <1) { // TODO 4
+		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_ROBOTS) {
+
 			// TODO: waiting for all players to join message
 			System.out.println("Waiting for players to join!");
 		}
@@ -114,6 +115,7 @@ public class GameScreen implements Screen {
 				robots.add(robot);
 			}
 		}
+	}
 
 		// for (int i = 0; i < NUMBER_OF_ROBOTS; i++) { //TODO Can use this if
 		// we want to dynamically generate robots
@@ -134,7 +136,6 @@ public class GameScreen implements Screen {
 		// robots.add(robot3);
 
 		// }
-	}
 
 	@Override
 	public void dispose() {
