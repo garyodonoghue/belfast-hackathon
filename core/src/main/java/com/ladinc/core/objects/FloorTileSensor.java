@@ -83,12 +83,12 @@ public class FloorTileSensor {
 		}
 	}
 	
-//	public void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
-//			int PIXELS_PER_METER)
-//	{
-//		Art.updateSprite(sprite, spriteBatch, PIXELS_PER_METER, this.body);
-//	}
-//	
+	public void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
+			int PIXELS_PER_METER)
+	{
+		Art.updateSprite(sprite, spriteBatch, PIXELS_PER_METER, this.body);
+	}
+	
 	private static Sprite retrieveFloorArtFromSprite(String key, int srcX)
 	{
 		if (!Art.spriteTable.containsKey(key))

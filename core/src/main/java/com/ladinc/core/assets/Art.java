@@ -63,8 +63,8 @@ public class Art {
 	{
 
 		
-		textureTable.put(PAINTER_BACKGROUND, new Texture(Gdx.files.internal("Painter/PainterBackground.png")));
-		textureTable.put(PAINT_TILES, new Texture(Gdx.files.internal("Painter/PaintTiles.png")));
+		textureTable.put(PAINTER_BACKGROUND, new Texture(Gdx.files.internal("PainterBackground.png")));
+		textureTable.put(PAINT_TILES, new Texture(Gdx.files.internal("PaintTiles.png")));
 		
 		
 	}

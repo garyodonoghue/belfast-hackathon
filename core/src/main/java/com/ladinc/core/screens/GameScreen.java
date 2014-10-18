@@ -117,6 +117,9 @@ public class GameScreen implements Screen {
 		postman.updateMovement(delta);
 
 		this.spriteBatch.begin();
+		
+		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
+		
 		this.spriteBatch.end();
 
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,

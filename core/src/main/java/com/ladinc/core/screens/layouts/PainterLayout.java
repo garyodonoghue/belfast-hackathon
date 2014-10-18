@@ -118,16 +118,9 @@ public class PainterLayout extends GenericLayout {
 	{
 		for (FloorTileSensor fts : floorSensors)
 		{
-			if (fts.assigned)
+			if (fts.isBlock)
 			{
-				if (fts.getTeam() == Team.Home)
-				{
-					fts.updateSprite(homeTile, sp, pixPerMeter);
-				}
-				else
-				{
-					fts.updateSprite(awayTile, sp, pixPerMeter);
-				}
+				fts.updateSprite(houseSprite, sp, pixPerMeter);
 			}
 		}
 	}
