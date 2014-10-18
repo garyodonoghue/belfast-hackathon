@@ -11,6 +11,14 @@
 	<artifactId>belfastgc-core</artifactId>
 	<packaging>jar</packaging>
 	<name>BelfastGC Core</name>
+	
+	<repositories>
+		<repository>
+			<id>in-project</id>
+			<name>In Project Repo</name>
+			<url>file://${project.basedir}/localJars</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
