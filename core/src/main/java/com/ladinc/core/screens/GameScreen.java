@@ -153,7 +153,7 @@ public class GameScreen implements Screen {
 			if(Gdx.input.isButtonPressed(0)){ 
 				System.out.println("reset Game button pressed");
 					GameScreen.GAME_OVER = false;
-					new GameScreen(game);
+					this.game.setScreen(new GameScreen(game));
 			}
 				
 			//resetValues(); //TODO New instance of Game screen
