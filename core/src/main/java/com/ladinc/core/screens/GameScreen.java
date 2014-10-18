@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -52,6 +53,7 @@ public class GameScreen implements Screen {
 	
 	private BitmapFont font;
 	private Texture gameOverTexture;
+	private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -226,6 +228,8 @@ public class GameScreen implements Screen {
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
 
 		getPostmanPositionIPad();
+		
+		wavSound.loop();
 		
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
