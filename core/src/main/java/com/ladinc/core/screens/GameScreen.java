@@ -34,7 +34,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 0; // TODO 4
+	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -183,6 +183,7 @@ public class GameScreen implements Screen {
 			if(Gdx.input.isButtonPressed(0)){ 
 				System.out.println("reset Game button pressed");
 					GameScreen.GAME_OVER = false;
+					GameScreen.lettersDelivered = 0;
 					this.game.setScreen(new GameScreen(game));
 			}
 				
