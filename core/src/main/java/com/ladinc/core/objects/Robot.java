@@ -1,5 +1,6 @@
 package com.ladinc.core.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.contorllers.IControls;
+import com.ladinc.core.screens.layouts.PainterLayout;
 
 public class Robot extends GameCharacter {
 	private final OrthographicCamera camera;
@@ -17,7 +19,10 @@ public class Robot extends GameCharacter {
 	private final Object sprite;
 
 	private final World world;
+	public IControls controller;
 
+	public static final int ROBOT_SPEED = 40;
+	
 	public Robot(World world, Vector2 startPos, int number,
 			OrthographicCamera camera, IControls iControls) {
 
@@ -27,6 +32,8 @@ public class Robot extends GameCharacter {
 
 		createBody(startPos);
 
+		this.controller  = iControls;
+		
 		this.sprite = Robot.getPlayerSprite();
 	}
 
@@ -56,7 +63,7 @@ public class Robot extends GameCharacter {
 		this.body.createFixture(fixtureDef);
 
 		this.body.setUserData(new CollisionInfo("robot",
-				CollisionObjectType.AIPlayer, this));
+				CollisionObjectType.Robot, this));
 	}
 
 	public int getNumber() {
@@ -65,6 +72,30 @@ public class Robot extends GameCharacter {
 
 	public Object getSprite() {
 		return sprite;
+	}
+
+	public void updateMovement(float delta) {
+		// sticks direction
+		Vector2 movement = this.controller.getMovementInput();
+		Vector2 rotation = this.controller.getRotationInput();
+
+		Gdx.app.debug(
+				"Robot - updateMovement",
+				"Movement: x=" + String.valueOf(movement.x) + " y="
+						+ String.valueOf(movement.y));
+
+		Vector2 position = this.body.getWorldCenter();
+
+		this.body.setLinearVelocity(new Vector2((ROBOT_SPEED) * movement.x,
+				(ROBOT_SPEED) * movement.y));
+
+	}
+	
+	public void vision(Postman postman, PainterLayout painterLayout){
+		if(painterLayout.getDistance(postman.body.getWorldCenter(), this.body.getWorldCenter()) < 25){
+			//MAKE POSTMAN VISIBLE HERE
+		}
+		
 	}
 
 }

@@ -15,30 +15,23 @@ import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.GameScreen;
+import com.ladinc.core.screens.layouts.PainterLayout;
 
 public class CollisionHelper implements ContactListener{
-
-//	private Sound warriorCollideSound;
-//	private Sound fall;
-//	
-//	public CollisionHelper(Sound collide, Sound fall)
-//	{
-//		this.warriorCollideSound = collide;
-//		this.fall = fall;
-//	}
 	
-	//public Sound sound = Gdx.audio.newSound(Gdx.files.internal("pop.mp3"));
+	//public Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.mp3"));
 	
 	public CollisionHelper()
 	{
 	}
 	
-	public boolean newScore = false;
+	public PainterLayout painterLayout;
+	public CollisionHelper(PainterLayout painterLayout)
+	{
+		this.painterLayout = painterLayout;
+	}
 	
-//	public Side getLastScored()
-//	{
-//		newScore = false;
-//	}
+	public boolean newScore = false;
 	
 	@Override
 	public void beginContact(Contact contact) 
@@ -73,13 +66,14 @@ public class CollisionHelper implements ContactListener{
         		
         		//if the hockey player's sword is disabled, dont kill the enemy
     			if(fts.isBlock)
-    			{
-    				GameScreen.lettersDelivered++;
-    				
-    				//if(fts.ismailbox)
-//    				{
-//    					//mail delivered mthod
-//    				}
+    			{   				
+    				if(fts.ismailbox)
+    				{
+    					//mail delivered mthod
+    					GameScreen.lettersDelivered++;
+    					fts.setIsmailbox(false);
+    					painterLayout.determineMailbox();
+    				}
     			}
         	}
         	else if(checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Postman, CollisionObjectType.Robot))
@@ -87,7 +81,7 @@ public class CollisionHelper implements ContactListener{
         		Postman postman;
         		Robot robot;
         		
-        		//Enemy has hit a sword
+        		//Player has hit into a Robot
         		if(bodyAInfo.type == CollisionObjectType.Postman)
         		{
         			postman = (Postman) bodyAInfo.object;
@@ -99,7 +93,9 @@ public class CollisionHelper implements ContactListener{
         			robot = (Robot) bodyAInfo.object;
         		}
         		
-        		//Game OVER
+        		//Game OVER - play sound and set game over to true 
+        		GameScreen.GAME_OVER = true;
+        		
         	}
         }
         

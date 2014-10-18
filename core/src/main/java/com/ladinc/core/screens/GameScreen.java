@@ -10,15 +10,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
 import com.ladinc.core.contorllers.listeners.MCPListenerClient;
+import com.ladinc.core.contorllers.KeyboardAndMouseControls;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.layouts.PainterLayout;
@@ -26,7 +31,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 3;
+	private static final int NUMBER_OF_ROBOTS = 1; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -39,14 +44,13 @@ public class GameScreen implements Screen {
 	private final int screenWidth;
 	private final SpriteBatch spriteBatch;
 	private World world;
-	
 	public static int lettersDelivered = 0;
-
 	private final int worldHeight;
-
 	private final int worldWidth;
+	public static boolean GAME_OVER = true;
 	
 	private BitmapFont font;
+	private Texture gameOverTexture;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -70,6 +74,11 @@ public class GameScreen implements Screen {
 		this.font.setColor(Color.WHITE);
 	}
 
+	private void createLayout() {
+		this.layout = new PainterLayout(world, worldWidth, worldHeight, center,
+				0, postman);
+	}
+	
 	private void buildRobotPositionsMap() {
 		robotPositions = new HashMap<Integer, Vector2>();
 
@@ -83,17 +92,27 @@ public class GameScreen implements Screen {
 	}
 
 	// this will add a predefined number of robots
-	private void createAndAssignRobotControls() {
+	private void createAndAssignControls() {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() < 2) { // TODO 4
+		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_ROBOTS) {
+
 			// TODO: waiting for all players to join message
+			System.out.println("Waiting for players to join!");
 		}
 
 		// All players have joined!
 		for (int i = 0; i < this.game.mcm.inActiveControls.size(); i++) {
-			if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
+			if(this.game.mcm.inActiveControls.get(i).getClass() == KeyboardAndMouseControls.class)
+			{
+				postman = new Postman(world, center, 0,
+						this.game.mcm.inActiveControls.get(i), false);
+				
+//				postman = new Postman(world, center, 0,
+//				MCPListenerClient.gpc, false);
+			}
+			else if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
 				// assign all the players using controllers to robots, the
 				// person using the ipad will be the postman
 
@@ -126,17 +145,11 @@ public class GameScreen implements Screen {
 		// }
 	}
 
-	private void createLayout() {
-		this.layout = new PainterLayout(world, worldWidth, worldHeight, center,
-				0);
-
-	}
-
 	private void createPostman() {
 		postman = new Postman(world, center, 0,
-				this.game.mcm.inActiveControls.get(0));
+				this.game.mcm.inActiveControls.get(0), false);
 //		postman = new Postman(world, center, 0,
-//				MCPListenerClient.gpc);
+//				MCPListenerClient.gpc, false);
 	}
 
 	@Override
@@ -162,7 +175,22 @@ public class GameScreen implements Screen {
 
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		this.spriteBatch.begin();
 
+		//check for Game Over, if set, play game over sound, reset values 
+		if(GAME_OVER){
+			displayGameOverImage();
+			
+			if(Gdx.input.isButtonPressed(0)){ 
+				System.out.println("reset Game button pressed");
+					GameScreen.GAME_OVER = false;
+					new GameScreen(game);
+			}
+				
+			//resetValues(); //TODO New instance of Game screen
+		}
+		else{
 		// camera.zoom = 2f;
 		camera.update();
 		// TODO: spriteBatch.setProjectionMatrix(camera.combined);
@@ -174,17 +202,29 @@ public class GameScreen implements Screen {
 
 		postman.updateMovement(delta);
 
-		this.spriteBatch.begin();
-		
+		updatePostmanSprite();
+
+		for(Robot robot : robots){
+			if(robot!=null){
+				robot.updateMovement(delta);
+				robot.vision(postman, this.layout);
+			}
+		}
+
 		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
 		
 		String scoreText = "Mail Delivered: " + lettersDelivered;
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
-		
-		this.spriteBatch.end();
 
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
+	}
+		
+		this.spriteBatch.end();
+	}
+	private void displayGameOverImage() {
+		gameOverTexture = new Texture(Gdx.files.internal("gameOverImg.png"));
+		spriteBatch.draw(gameOverTexture, 0, 0);
 	}
 
 	@Override
@@ -202,13 +242,40 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
-		world.setContactListener(new CollisionHelper());
-
-		createLayout();
-
-		createPostman();
+		
 		buildRobotPositionsMap();
-		createAndAssignRobotControls();
+		createAndAssignControls();
+				
+		createLayout();
+		world.setContactListener(new CollisionHelper(this.layout));	
 	}
 
+		private void updatePostmanSprite() {
+			//TODO Move this into a map
+			if(postman.isVisible()){ //only draw the postman if he's close to robots
+				Texture playerTexture = new Texture(
+						Gdx.files.internal("postman.png"));
+				
+				updateSprite(new Sprite(playerTexture), spriteBatch, PIXELS_PER_METER, postman.body);
+			}
+	}
+
+		public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
+				int PIXELS_PER_METER, Body body) {
+			if (sprite != null && spriteBatch != null && body != null) {
+				setSpritePosition(sprite, PIXELS_PER_METER, body);
+				sprite.draw(spriteBatch);
+			}
+		}
+		
+		public static void setSpritePosition(Sprite sprite, int PIXELS_PER_METER,
+				Body body) {
+
+			sprite.setPosition(
+					PIXELS_PER_METER * body.getWorldCenter().x - sprite.getWidth()
+							/ 2, PIXELS_PER_METER * body.getWorldCenter().y
+							- sprite.getHeight() / 2);
+
+			sprite.setRotation((MathUtils.radiansToDegrees * body.getAngle()));
+		}	
 }
