@@ -10,6 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -39,14 +40,13 @@ public class GameScreen implements Screen {
 	private final int screenWidth;
 	private final SpriteBatch spriteBatch;
 	private World world;
-	
 	public static int lettersDelivered = 0;
-
 	private final int worldHeight;
-
 	private final int worldWidth;
+	public static boolean GAME_OVER = false;
 	
 	private BitmapFont font;
+	private Texture gameOverTexture;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -117,26 +117,6 @@ public class GameScreen implements Screen {
 		}
 	}
 
-		// for (int i = 0; i < NUMBER_OF_ROBOTS; i++) { //TODO Can use this if
-		// we want to dynamically generate robots
-		// Vector2 robot1Pos = new Vector2(70, 80);
-		// Robot robot1 = new Robot(world, robot1Pos, 1, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// Vector2 robot2Pos = new Vector2(20, 10);
-		// Robot robot2 = new Robot(world, robot2Pos, 2, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// Vector2 robot3Pos = new Vector2(60, 30);
-		// Robot robot3 = new Robot(world, robot3Pos, 3, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// robots.add(robot1);
-		// robots.add(robot2);
-		// robots.add(robot3);
-
-		// }
-
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -160,7 +140,22 @@ public class GameScreen implements Screen {
 
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		this.spriteBatch.begin();
 
+		//check for Game Over, if set, play game over sound, reset values 
+		if(GAME_OVER){
+			displayGameOverImage();
+			
+			if(Gdx.input.isButtonPressed(0)){ 
+				System.out.println("reset Game button pressed");
+					GameScreen.GAME_OVER = false;
+					
+			}
+				
+			//resetValues(); //TODO New instance of Game screen
+		}
+		else{
 		// camera.zoom = 2f;
 		camera.update();
 		// TODO: spriteBatch.setProjectionMatrix(camera.combined);
@@ -178,17 +173,21 @@ public class GameScreen implements Screen {
 				robot.vision(postman, this.layout);
 			}
 		}
-		this.spriteBatch.begin();
-		
+
 		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
 		
 		String scoreText = "Mail Delivered: " + lettersDelivered;
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
-		
-		this.spriteBatch.end();
 
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
+	}
+		
+		this.spriteBatch.end();
+	}
+	private void displayGameOverImage() {
+		gameOverTexture = new Texture(Gdx.files.internal("gameOverImg.png"));
+		spriteBatch.draw(gameOverTexture, 0, 0);
 	}
 
 	@Override
