@@ -87,7 +87,7 @@ public class CollisionHelper implements ContactListener{
         		Postman postman;
         		Robot robot;
         		
-        		//Enemy has hit a sword
+        		//Player has hit into a Robot
         		if(bodyAInfo.type == CollisionObjectType.Postman)
         		{
         			postman = (Postman) bodyAInfo.object;
@@ -100,6 +100,7 @@ public class CollisionHelper implements ContactListener{
         		}
         		
         		//Game OVER
+        		
         	}
         }
         

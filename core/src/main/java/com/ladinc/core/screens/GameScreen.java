@@ -26,7 +26,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 3;
+	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() < 3) { // TODO 4
+		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_ROBOTS) {
 			// TODO: waiting for all players to join message
 			System.out.println("Waiting for players to join!");
 		}
@@ -109,26 +109,6 @@ public class GameScreen implements Screen {
 				robots.add(robot);
 			}
 		}
-
-		// for (int i = 0; i < NUMBER_OF_ROBOTS; i++) { //TODO Can use this if
-		// we want to dynamically generate robots
-		// Vector2 robot1Pos = new Vector2(70, 80);
-		// Robot robot1 = new Robot(world, robot1Pos, 1, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// Vector2 robot2Pos = new Vector2(20, 10);
-		// Robot robot2 = new Robot(world, robot2Pos, 2, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// Vector2 robot3Pos = new Vector2(60, 30);
-		// Robot robot3 = new Robot(world, robot3Pos, 3, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// robots.add(robot1);
-		// robots.add(robot2);
-		// robots.add(robot3);
-
-		// }
 	}
 
 	private void createLayout() {
