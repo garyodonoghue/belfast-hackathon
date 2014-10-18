@@ -34,7 +34,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
+	private static final int NUMBER_OF_ROBOTS = 0; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -97,7 +97,6 @@ public class GameScreen implements Screen {
 		obj.put("mailboxx", painterLayout.mailboxTile.body.getWorldCenter().x / this.worldWidth);
 		obj.put("mailboxy", painterLayout.mailboxTile.body.getWorldCenter().y / this.worldHeight);
 		this.game.mcm.moreControllers.hearbeatResponses.put("1", obj);
-		System.out.println(painterLayout.mailboxTile.body.getWorldCenter().x + " , " + painterLayout.mailboxTile.body.getWorldCenter().y);
 	}
 
 	private void createLayout() {
