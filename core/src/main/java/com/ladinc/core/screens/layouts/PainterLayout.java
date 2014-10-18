@@ -109,10 +109,7 @@ public class PainterLayout extends GenericLayout {
 				if (i % 2 == 1 && j % 2 == 1) {
 					floorSensors.add(new FloorTileSensor(world, TILE_SIZE,
 							TILE_SIZE, new Vector2(tempX, tempY), false));
-				} else {
-					floorSensors.add(new FloorTileSensor(world, TILE_SIZE,
-							TILE_SIZE, new Vector2(tempX, tempY), true));
-				}
+				} 
 			}
 		}
 		
