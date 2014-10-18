@@ -24,7 +24,7 @@ public class FloorTileSensor {
 	//public Team team;
 	
 	public FloorTileSensor(World world, float width, float height,
-			Vector2 position) {
+			Vector2 position, boolean filled) {
 		super();
 		this.width = width;
 		this.height = height;
@@ -42,7 +42,7 @@ public class FloorTileSensor {
 		boxShape.setAsBox(this.width / 2, this.height / 2);
 		fixtureDef.shape = boxShape;
 		fixtureDef.restitution = 0.4f; // positively bouncy!
-		fixtureDef.isSensor = true;
+		fixtureDef.isSensor = filled;
 		this.body.createFixture(fixtureDef);
 		
 //		this.body.setUserData(new CollisionInfo("FloorSensor",
