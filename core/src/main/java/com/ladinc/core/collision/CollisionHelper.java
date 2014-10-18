@@ -17,28 +17,14 @@ import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.GameScreen;
 
 public class CollisionHelper implements ContactListener{
-
-//	private Sound warriorCollideSound;
-//	private Sound fall;
-//	
-//	public CollisionHelper(Sound collide, Sound fall)
-//	{
-//		this.warriorCollideSound = collide;
-//		this.fall = fall;
-//	}
 	
-	//public Sound sound = Gdx.audio.newSound(Gdx.files.internal("pop.mp3"));
+	//public Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.mp3"));
 	
 	public CollisionHelper()
-	{
+	{		
 	}
 	
 	public boolean newScore = false;
-	
-//	public Side getLastScored()
-//	{
-//		newScore = false;
-//	}
 	
 	@Override
 	public void beginContact(Contact contact) 
@@ -99,7 +85,8 @@ public class CollisionHelper implements ContactListener{
         			robot = (Robot) bodyAInfo.object;
         		}
         		
-        		//Game OVER
+        		//Game OVER - play sound and set game over to true 
+        		GameScreen.GAME_OVER = true;
         		
         	}
         }
