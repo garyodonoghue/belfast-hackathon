@@ -99,12 +99,16 @@ public class PainterLayout extends GenericLayout {
 		{
 			tempX = i * TILE_SIZE + TILE_SIZE / 2
 					+ GAP_BETWEEN_SIDEWALL_AND_EDGE + 0.5f;
-			for (int j = 0; j < 9; j++)
-			{
+			for (int j = 0; j < 9; j++) {
 				tempY = j * TILE_SIZE + TILE_SIZE / 2
 						+ GAP_BETWEEN_TOPBOTTOMWALL_AND_EDGE + 0.5f;
-				floorSensors.add(new FloorTileSensor(world, TILE_SIZE,
-						TILE_SIZE, new Vector2(tempX, tempY)));
+				if (i % 2 == 1 && j % 2 == 1) {
+					floorSensors.add(new FloorTileSensor(world, TILE_SIZE,
+							TILE_SIZE, new Vector2(tempX, tempY), false));
+				} else {
+					floorSensors.add(new FloorTileSensor(world, TILE_SIZE,
+							TILE_SIZE, new Vector2(tempX, tempY), true));
+				}
 			}
 		}
 	}
