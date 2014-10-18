@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.StartingPosition;
+import com.ladinc.core.utilities.Enums.BoxType;
 
 public class PainterLayout extends GenericLayout {
 	
@@ -18,8 +19,8 @@ public class PainterLayout extends GenericLayout {
 	
 	private static final float PLAYER_GAP_X = 8f;
 	
-//	private final Sprite homeTile;
-//	private final Sprite awayTile;
+	private final Sprite houseSprite;
+	private final Sprite mailBox;
 	
 	public int homeScore = 0;
 	public int awayScore = 0;
@@ -30,8 +31,8 @@ public class PainterLayout extends GenericLayout {
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
 		
-//		homeTile = FloorTileSensor.getSprite(Team.Home);
-//		awayTile = FloorTileSensor.getSprite(Team.Away);
+		houseSprite = FloorTileSensor.getSprite(BoxType.House);
+		mailBox = FloorTileSensor.getSprite(BoxType.Mailbox);
 	}
 	
 //	@Override
@@ -117,17 +118,17 @@ public class PainterLayout extends GenericLayout {
 	{
 		for (FloorTileSensor fts : floorSensors)
 		{
-//			if (fts.assigned)
-//			{
-//				if (fts.getTeam() == Team.Home)
-//				{
-//					fts.updateSprite(homeTile, sp, pixPerMeter);
-//				}
-//				else
-//				{
-//					fts.updateSprite(awayTile, sp, pixPerMeter);
-//				}
-//			}
+			if (fts.assigned)
+			{
+				if (fts.getTeam() == Team.Home)
+				{
+					fts.updateSprite(homeTile, sp, pixPerMeter);
+				}
+				else
+				{
+					fts.updateSprite(awayTile, sp, pixPerMeter);
+				}
+			}
 		}
 	}
 	

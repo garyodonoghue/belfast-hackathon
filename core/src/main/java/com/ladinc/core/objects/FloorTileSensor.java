@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
+import com.ladinc.core.utilities.Enums.BoxType;
 
 
 public class FloorTileSensor {
@@ -51,21 +53,21 @@ public class FloorTileSensor {
 		boxShape.dispose();
 	}
 	
-//	public static Sprite getSprite(Team team)
-//	{
-////		if (team == Team.Home)
-////		{
-////			return retrieveFloorArtFromSprite(HOME_FLOOR_TILE, 0);
-////		}
-////		else if (team == Team.Away)
-////		{
-////			return retrieveFloorArtFromSprite(AWAY_FLOOR_TILE, 100);
-////		}
-//		//else
-//		{
-//			return retrieveFloorArtFromSprite(NEUTRAL_FLOOR_TILE, 300);
-//		}
-//	}
+	public static Sprite getSprite(BoxType type)
+	{
+		if (type == BoxType.House)
+		{
+			return retrieveFloorArtFromSprite(HOME_FLOOR_TILE, 0);
+		}
+		else if (type == BoxType.House)
+		{
+			return retrieveFloorArtFromSprite(AWAY_FLOOR_TILE, 100);
+		}
+		else
+		{
+			return retrieveFloorArtFromSprite(NEUTRAL_FLOOR_TILE, 300);
+		}
+	}
 	
 //	public void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
 //			int PIXELS_PER_METER)
@@ -73,17 +75,17 @@ public class FloorTileSensor {
 //		Art.updateSprite(sprite, spriteBatch, PIXELS_PER_METER, this.body);
 //	}
 //	
-//	private static Sprite retrieveFloorArtFromSprite(String key, int srcX)
-//	{
-//		if (!Art.spriteTable.containsKey(key))
-//		{
-//			Art.spriteTable.put(key,
-//					new Sprite(Art.textureTable.get(Art.PAINT_TILES), srcX, 0,
-//							100, 100));
-//		}
-//		
-//		return Art.spriteTable.get(key);
-//	}
+	private static Sprite retrieveFloorArtFromSprite(String key, int srcX)
+	{
+		if (!Art.spriteTable.containsKey(key))
+		{
+			Art.spriteTable.put(key,
+					new Sprite(Art.textureTable.get(Art.PAINT_TILES), srcX, 0,
+							100, 100));
+		}
+		
+		return Art.spriteTable.get(key);
+	}
 	
 //	public void setTeam(Team t)
 //	{
