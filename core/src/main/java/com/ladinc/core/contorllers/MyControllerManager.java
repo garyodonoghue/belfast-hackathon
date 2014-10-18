@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.ladinc.core.contorllers.listeners.KeyboardAndMouseListener;
+import com.ladinc.core.contorllers.listeners.MCPListenerClient;
 import com.ladinc.core.contorllers.listeners.desktop.XboxListener;
 import com.ladinc.mcp.MCP;
 import com.ladinc.mcp.RedirectOption;
@@ -42,10 +43,7 @@ public class MyControllerManager {
     	moreControllers.redirectOptions.clear();
 
     	//Add Our Page
-    	moreControllers.redirectOptions.add(new RedirectOption("glitchPerfectHacker", "Glitch Perfect Hacker"));
-
-    	moreControllers.customLinks.add("glitchPerfectHacker");
-    	moreControllers.customLinks.add("stars.png");
+    	moreControllers.redirectOptions.add(new RedirectOption("postman", "Postman"));
         
         ipAddr = moreControllers.getAddressForClients();
         if(ipAddr.equals(":8888"))
@@ -57,7 +55,7 @@ public class MyControllerManager {
         
 //        HackEventManager.moreControllers = moreControllers;
 //        
-//        moreControllers.addMCPListener(new MCPListenerClient());
+       moreControllers.addMCPListener(new MCPListenerClient());
     }
 	
 //	public void resetIdentifiers()

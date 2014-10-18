@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,7 +25,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
-import com.ladinc.core.contorllers.listeners.MCPListenerClient;
 import com.ladinc.core.contorllers.KeyboardAndMouseControls;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
@@ -51,6 +53,7 @@ public class GameScreen implements Screen {
 	
 	private BitmapFont font;
 	private Texture gameOverTexture;
+	private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -74,6 +77,13 @@ public class GameScreen implements Screen {
 		
 		font = new BitmapFont(Gdx.files.internal("Swis-721-50.fnt"), Gdx.files.internal("Swis-721-50.png"), false);
 		this.font.setColor(Color.WHITE);
+	}
+	
+	private void getPostmanPositionIPad() {
+		JSONObject obj = new JSONObject();
+		obj.put("postx", this.postman.body.getWorldCenter().x);
+		obj.put("posty", this.postman.body.getWorldCenter().y);
+		this.game.mcm.moreControllers.hearbeatResponses.put("1", obj);
 	}
 
 	private void createLayout() {
@@ -182,9 +192,12 @@ public class GameScreen implements Screen {
 		for(Robot robot : robots){
 			if(robot!=null){
 				robot.updateMovement(delta);
-				robot.vision(postman, this.layout);
 			}
 		}
+		postman.canRobotsSeeMe(robots, this.layout);
+
+		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
+		
 		String scoreText = "Mail Delivered: " + lettersDelivered;
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
 
@@ -193,8 +206,14 @@ public class GameScreen implements Screen {
 		
 		this.spriteBatch.end();
 
+		getPostmanPositionIPad();
+		
+		wavSound.loop();
+		
+		if(!GAME_OVER){
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
+		}
 	}
 	private void displayGameOverImage() {
 		spriteBatch.draw(gameOverTexture, 0, 0);
@@ -220,7 +239,7 @@ public class GameScreen implements Screen {
 		createAndAssignControls();
 				
 		createLayout();
-		world.setContactListener(new CollisionHelper(this.layout));	
+		world.setContactListener(new CollisionHelper(this.layout));
 	}
 
 		private void updatePostmanSprite() {
