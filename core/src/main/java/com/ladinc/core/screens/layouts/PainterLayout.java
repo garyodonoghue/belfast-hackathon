@@ -26,7 +26,7 @@ public class PainterLayout extends GenericLayout {
 	public int homeScore = 0;
 	public int awayScore = 0;
 	
-	public ArrayList<FloorTileSensor> floorSensors;
+	public static ArrayList<FloorTileSensor> floorSensors;
 	public ArrayList<FloorTileSensor> possibleMailBoxes;
 	
 	public FloorTileSensor mailboxTile;

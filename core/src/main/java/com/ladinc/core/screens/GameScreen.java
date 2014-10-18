@@ -26,6 +26,7 @@ import com.ladinc.core.BelfastGC;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
 import com.ladinc.core.contorllers.KeyboardAndMouseControls;
+import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.layouts.PainterLayout;
@@ -33,7 +34,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 1; // TODO 4
+	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -50,10 +51,14 @@ public class GameScreen implements Screen {
 	private final int worldHeight;
 	private final int worldWidth;
 	public static boolean GAME_OVER = true;
+	private Texture postmanTexture;
 	
 	private BitmapFont font;
 	private Texture gameOverTexture;
 	//private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
+	private Texture tgtHouseTexture;
+	private Texture normalHouseTexture;
+	private Texture robotTexture;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -73,7 +78,15 @@ public class GameScreen implements Screen {
 
 		this.debugRenderer = new Box2DDebugRenderer();
 		
+		this.gameOverTexture = new Texture(Gdx.files.internal("gameOverImg.png"));
+		
 		font = new BitmapFont(Gdx.files.internal("Swis-721-50.fnt"), Gdx.files.internal("Swis-721-50.png"), false);
+		postmanTexture = new Texture(Gdx.files.internal("postman.png"));
+		
+		tgtHouseTexture  = new Texture(Gdx.files.internal("house_target.png"));
+		normalHouseTexture  = new Texture(Gdx.files.internal("house_normal.png"));
+		robotTexture  = new Texture(Gdx.files.internal("robot.png"));
+		
 		this.font.setColor(Color.WHITE);
 	}
 	
@@ -136,35 +149,8 @@ public class GameScreen implements Screen {
 				robots.add(robot);
 			}
 		}
-
-		// for (int i = 0; i < NUMBER_OF_ROBOTS; i++) { //TODO Can use this if
-		// we want to dynamically generate robots
-		// Vector2 robot1Pos = new Vector2(70, 80);
-		// Robot robot1 = new Robot(world, robot1Pos, 1, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// Vector2 robot2Pos = new Vector2(20, 10);
-		// Robot robot2 = new Robot(world, robot2Pos, 2, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// Vector2 robot3Pos = new Vector2(60, 30);
-		// Robot robot3 = new Robot(world, robot3Pos, 3, camera,
-		// this.game.mcm.inActiveControls.get(0));
-		//
-		// robots.add(robot1);
-		// robots.add(robot2);
-		// robots.add(robot3);
-
-		// }
 	}
-
-	private void createPostman() {
-		postman = new Postman(world, center, 0,
-				this.game.mcm.inActiveControls.get(0), false);
-//		postman = new Postman(world, center, 0,
-//				MCPListenerClient.gpc, false);
-	}
-
+	
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -206,7 +192,7 @@ public class GameScreen implements Screen {
 		else{
 		// camera.zoom = 2f;
 		camera.update();
-		// TODO: spriteBatch.setProjectionMatrix(camera.combined);
+		spriteBatch.setProjectionMatrix(camera.combined);
 
 		world.step(Gdx.app.getGraphics().getDeltaTime(), 10, 10);
 		// world.clearForces();
@@ -217,31 +203,54 @@ public class GameScreen implements Screen {
 
 		updatePostmanSprite();
 
+		updateTileSprites();
+		
+		updateRobotSprites();
+		
 		for(Robot robot : robots){
 			if(robot!=null){
 				robot.updateMovement(delta);
 			}
 		}
-		
 		postman.canRobotsSeeMe(robots, this.layout);
 
-		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
+		//layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
 		
 		String scoreText = "Mail Delivered: " + lettersDelivered;
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
+	}
+		
+		this.spriteBatch.end();
 
 		getPostmanPositionIPad(this.layout);
 		
 		//wavSound.loop();
 		
+		if(!GAME_OVER){
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
+		}
 	}
-		
-		this.spriteBatch.end();
+	private void updateRobotSprites() {
+		for(Robot robot : robots){
+			updateSprite(new Sprite(new Sprite(robotTexture)), spriteBatch, PIXELS_PER_METER, robot.body);
+		}
 	}
+
+	private void updateTileSprites() {
+		for(FloorTileSensor floorTile : PainterLayout.floorSensors){
+			if(floorTile.isBlock){
+				if(floorTile.ismailbox){
+					updateSprite(new Sprite(tgtHouseTexture), spriteBatch, PIXELS_PER_METER, floorTile.body);
+				}
+				else{
+					updateSprite(new Sprite(normalHouseTexture), spriteBatch, PIXELS_PER_METER, floorTile.body);
+				}
+			}
+		}
+	}
+
 	private void displayGameOverImage() {
-		gameOverTexture = new Texture(Gdx.files.internal("gameOverImg.png"));
 		spriteBatch.draw(gameOverTexture, 0, 0);
 	}
 
@@ -271,10 +280,7 @@ public class GameScreen implements Screen {
 		private void updatePostmanSprite() {
 			//TODO Move this into a map
 			if(postman.isVisible()){ //only draw the postman if he's close to robots
-				Texture playerTexture = new Texture(
-						Gdx.files.internal("postman.png"));
-				
-				updateSprite(new Sprite(playerTexture), spriteBatch, PIXELS_PER_METER, postman.body);
+				updateSprite(new Sprite(postmanTexture), spriteBatch, PIXELS_PER_METER, postman.body);
 			}
 	}
 
