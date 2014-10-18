@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
+import com.ladinc.core.contorllers.KeyboardAndMouseControls;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.layouts.PainterLayout;
@@ -82,17 +83,22 @@ public class GameScreen implements Screen {
 	}
 
 	// this will add a predefined number of robots
-	private void createAndAssignRobotControls() {
+	private void createAndAssignControls() {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() < 2) { // TODO 4
+		while (this.game.mcm.inActiveControls.size() < 3) { // TODO 4
 			// TODO: waiting for all players to join message
+			System.out.println("Waiting for players to join!");
 		}
 
 		// All players have joined!
 		for (int i = 0; i < this.game.mcm.inActiveControls.size(); i++) {
-			if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
+			if(this.game.mcm.inActiveControls.get(i).getClass() == KeyboardAndMouseControls.class){
+				postman = new Postman(world, center, 0,
+						this.game.mcm.inActiveControls.get(i));
+			}
+			else if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
 				// assign all the players using controllers to robots, the
 				// person using the ipad will be the postman
 
@@ -131,11 +137,6 @@ public class GameScreen implements Screen {
 
 	}
 
-	private void createPostman() {
-		postman = new Postman(world, center, 0,
-				this.game.mcm.inActiveControls.get(0));
-	}
-
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -170,7 +171,12 @@ public class GameScreen implements Screen {
 		world.clearForces();
 
 		postman.updateMovement(delta);
-
+		
+		for(Robot robot : robots){
+			if(robot!=null){
+				robot.updateMovement(delta);
+			}
+		}
 		this.spriteBatch.begin();
 		
 		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
@@ -202,10 +208,9 @@ public class GameScreen implements Screen {
 		world.setContactListener(new CollisionHelper());
 
 		createLayout();
-
-		createPostman();
+		
 		buildRobotPositionsMap();
-		createAndAssignRobotControls();
+		createAndAssignControls();
 	}
 
 }
