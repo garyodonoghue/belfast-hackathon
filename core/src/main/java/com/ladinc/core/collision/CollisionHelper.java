@@ -14,6 +14,7 @@ import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
+import com.ladinc.core.screens.GameScreen;
 
 public class CollisionHelper implements ContactListener{
 
@@ -73,6 +74,8 @@ public class CollisionHelper implements ContactListener{
         		//if the hockey player's sword is disabled, dont kill the enemy
     			if(fts.isBlock)
     			{
+    				GameScreen.lettersDelivered++;
+    				
     				//if(fts.ismailbox)
 //    				{
 //    					//mail delivered mthod
