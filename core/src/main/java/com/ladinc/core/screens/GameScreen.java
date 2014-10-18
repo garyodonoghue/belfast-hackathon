@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
 		for (int i = 0; i < this.game.mcm.inActiveControls.size(); i++) {
 			if(this.game.mcm.inActiveControls.get(i).getClass() == KeyboardAndMouseControls.class){
 				postman = new Postman(world, center, 0,
-						this.game.mcm.inActiveControls.get(i));
+						this.game.mcm.inActiveControls.get(i), false);
 			}
 			else if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
 				// assign all the players using controllers to robots, the
@@ -175,6 +175,7 @@ public class GameScreen implements Screen {
 		for(Robot robot : robots){
 			if(robot!=null){
 				robot.updateMovement(delta);
+				robot.vision(postman, this.layout);
 			}
 		}
 

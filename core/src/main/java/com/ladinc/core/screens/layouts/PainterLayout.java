@@ -124,10 +124,7 @@ public class PainterLayout extends GenericLayout {
 	}
 
 	public void determineMailbox() {
-		//TODO: deactive currentmailbox
-		
 		//setting mailbox
-		
 		ArrayList<Double> listOfMailboxDistances = new ArrayList<Double>();
 		double sum = 0;
 		for (FloorTileSensor possibleMailBox : possibleMailBoxes) {

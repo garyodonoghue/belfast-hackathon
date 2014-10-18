@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.contorllers.IControls;
+import com.ladinc.core.screens.layouts.PainterLayout;
 
 public class Robot extends GameCharacter {
 	private final OrthographicCamera camera;
@@ -20,7 +21,7 @@ public class Robot extends GameCharacter {
 	private final World world;
 	public IControls controller;
 
-	public static final int ROBOT_SPEED = 50;
+	public static final int ROBOT_SPEED = 40;
 	
 	public Robot(World world, Vector2 startPos, int number,
 			OrthographicCamera camera, IControls iControls) {
@@ -88,6 +89,13 @@ public class Robot extends GameCharacter {
 		this.body.setLinearVelocity(new Vector2((ROBOT_SPEED) * movement.x,
 				(ROBOT_SPEED) * movement.y));
 
+	}
+	
+	public void vision(Postman postman, PainterLayout painterLayout){
+		if(painterLayout.getDistance(postman.body.getWorldCenter(), this.body.getWorldCenter()) < 25){
+			//MAKE POSTMAN VISIBLE HERE
+		}
+		
 	}
 
 }
