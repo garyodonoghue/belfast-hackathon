@@ -175,9 +175,10 @@ public class GameScreen implements Screen {
 		for(Robot robot : robots){
 			if(robot!=null){
 				robot.updateMovement(delta);
-				robot.vision(postman, this.layout);
 			}
 		}
+		
+		postman.canRobotsSeeMe(robots, this.layout);
 
 		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
 		

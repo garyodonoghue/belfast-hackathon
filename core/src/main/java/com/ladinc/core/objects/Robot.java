@@ -90,12 +90,5 @@ public class Robot extends GameCharacter {
 				(ROBOT_SPEED) * movement.y));
 
 	}
-	
-	public void vision(Postman postman, PainterLayout painterLayout){
-		if(painterLayout.getDistance(postman.body.getWorldCenter(), this.body.getWorldCenter()) < 25){
-			//MAKE POSTMAN VISIBLE HERE
-		}
-		
-	}
 
 }

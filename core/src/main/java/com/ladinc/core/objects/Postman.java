@@ -1,16 +1,18 @@
 package com.ladinc.core.objects;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.contorllers.IControls;
+import com.ladinc.core.screens.layouts.PainterLayout;
 
 public class Postman extends GameCharacter {
 
@@ -88,6 +90,16 @@ public class Postman extends GameCharacter {
 		this.body.setLinearVelocity(new Vector2((USER_SPEED) * movement.x,
 				(USER_SPEED) * movement.y));
 
+	}
+	
+	public void canRobotsSeeMe(List<Robot> robots, PainterLayout painterLayout){
+		boolean visible = false;
+		for (Robot robot : robots) {
+			if(painterLayout.getDistance(this.body.getWorldCenter(), robot.body.getWorldCenter()) < 15){
+				visible = true;
+			}
+		}
+		this.setVisible(visible);
 	}
 
 	public boolean isVisible() {
