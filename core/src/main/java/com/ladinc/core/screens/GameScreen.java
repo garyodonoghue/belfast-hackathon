@@ -34,7 +34,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 1; // TODO 4
+	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -58,6 +58,7 @@ public class GameScreen implements Screen {
 	//private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
 	private Texture tgtHouseTexture;
 	private Texture normalHouseTexture;
+	private Texture robotTexture;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -84,6 +85,7 @@ public class GameScreen implements Screen {
 		
 		tgtHouseTexture  = new Texture(Gdx.files.internal("house_target.png"));
 		normalHouseTexture  = new Texture(Gdx.files.internal("house_normal.png"));
+		robotTexture  = new Texture(Gdx.files.internal("robot.png"));
 		
 		this.font.setColor(Color.WHITE);
 	}
@@ -187,7 +189,7 @@ public class GameScreen implements Screen {
 		else{
 		// camera.zoom = 2f;
 		camera.update();
-		// TODO: spriteBatch.setProjectionMatrix(camera.combined);
+		spriteBatch.setProjectionMatrix(camera.combined);
 
 		world.step(Gdx.app.getGraphics().getDeltaTime(), 10, 10);
 		// world.clearForces();
@@ -199,6 +201,8 @@ public class GameScreen implements Screen {
 		updatePostmanSprite();
 
 		updateTileSprites();
+		
+		updateRobotSprites();
 		
 		for(Robot robot : robots){
 			if(robot!=null){
@@ -224,6 +228,12 @@ public class GameScreen implements Screen {
 				PIXELS_PER_METER, PIXELS_PER_METER));
 		}
 	}
+	private void updateRobotSprites() {
+		for(Robot robot : robots){
+			updateSprite(new Sprite(new Sprite(robotTexture)), spriteBatch, PIXELS_PER_METER, robot.body);
+		}
+	}
+
 	private void updateTileSprites() {
 		for(FloorTileSensor floorTile : PainterLayout.floorSensors){
 			if(floorTile.isBlock){
