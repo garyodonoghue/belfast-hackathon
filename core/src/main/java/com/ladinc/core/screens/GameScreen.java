@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
+import com.ladinc.core.objects.GameCharacter;
+import com.ladinc.core.objects.Postman;
 
 public class GameScreen implements Screen {
 
@@ -23,6 +25,8 @@ public class GameScreen implements Screen {
 	private World world;
 	private final int worldHeight;
 	private final int worldWidth;
+	
+	private Postman postman;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -75,6 +79,8 @@ public class GameScreen implements Screen {
 		// world.clearForces();
 		// world.step(1/60f, 3, 3);
 		world.clearForces();
+		
+		postman.updateMovement(delta);
 
 		this.spriteBatch.begin();
 		this.spriteBatch.end();
@@ -98,5 +104,13 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
+		
+		createPostman();
 	}
+	
+	private void createPostman()
+	{
+		postman = new Postman(world, center, 0, this.game.mcm.inActiveControls.get(0));
+	}
+	
 }
