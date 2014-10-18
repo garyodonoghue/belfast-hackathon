@@ -16,12 +16,13 @@ public class Postman extends GameCharacter {
 
 	private final Object sprite;
 	private final World world;
+	private boolean visible = false;
 	
 	public static final int USER_SPEED = 50;
 	
 	public IControls controller;
 
-	public Postman(World world, Vector2 startPos, int number, IControls cont) {
+	public Postman(World world, Vector2 startPos, int number, IControls cont, boolean visible) {
 
 		this.world = world;
 
@@ -32,6 +33,8 @@ public class Postman extends GameCharacter {
 		this.controller = cont;
 
 		this.sprite = Robot.getPlayerSprite();
+		
+		this.visible = visible;
 	}
 
 	@Override
@@ -85,6 +88,14 @@ public class Postman extends GameCharacter {
 		this.body.setLinearVelocity(new Vector2((USER_SPEED) * movement.x,
 				(USER_SPEED) * movement.y));
 
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 }
