@@ -34,7 +34,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
+	private static final int NUMBER_OF_PLAYERS = 1; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -50,7 +50,9 @@ public class GameScreen implements Screen {
 	public static int lettersDelivered = 0;
 	private final int worldHeight;
 	private final int worldWidth;
-	public static boolean GAME_OVER = true;
+	public static boolean GAME_OVER = false;
+	public static boolean INTRO_SCREEN = true;
+	
 	private Texture postmanTexture;
 	
 	private BitmapFont font;
@@ -60,6 +62,8 @@ public class GameScreen implements Screen {
 	private Texture normalHouseTexture;
 	private Texture robotTexture;
 
+	private Texture splashScreenTexture;
+	
 	public GameScreen(BelfastGC game) {
 		this.game = game;
 
@@ -79,6 +83,8 @@ public class GameScreen implements Screen {
 		this.debugRenderer = new Box2DDebugRenderer();
 		
 		this.gameOverTexture = new Texture(Gdx.files.internal("gameOverImg.png"));
+		
+		this.splashScreenTexture = new Texture(Gdx.files.internal("postmanPanic.png"));
 		
 		font = new BitmapFont(Gdx.files.internal("Swis-721-50.fnt"), Gdx.files.internal("Swis-721-50.png"), false);
 		postmanTexture = new Texture(Gdx.files.internal("postman.png"));
@@ -119,7 +125,7 @@ public class GameScreen implements Screen {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_ROBOTS) {
+		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_PLAYERS) {
 
 			// TODO: waiting for all players to join message
 			System.out.println("Waiting for players to join!");
@@ -174,8 +180,17 @@ public class GameScreen implements Screen {
 		
 		this.spriteBatch.begin();
 
+		if(INTRO_SCREEN){
+			spriteBatch.draw(splashScreenTexture, 0, 0);
+			
+			if(Gdx.input.isButtonPressed(0)){ 
+				INTRO_SCREEN = false;
+			}
+		}
 		//check for Game Over, if set, play game over sound, reset values 
-		if(GAME_OVER){
+		else {
+			if(GAME_OVER){
+		
 			displayGameOverImage();
 			
 			if(Gdx.input.isButtonPressed(0)){ 
@@ -216,8 +231,6 @@ public class GameScreen implements Screen {
 		String scoreText = "Mail Delivered: " + lettersDelivered;
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
 	}
-		
-		this.spriteBatch.end();
 
 		getPostmanPositionIPad();
 		
@@ -227,6 +240,8 @@ public class GameScreen implements Screen {
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
 		}
+	}
+		this.spriteBatch.end();
 	}
 	private void updateRobotSprites() {
 		for(Robot robot : robots){
