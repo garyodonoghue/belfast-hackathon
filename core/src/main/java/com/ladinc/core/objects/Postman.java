@@ -25,7 +25,7 @@ public class Postman extends GameCharacter {
 
 		this.world = world;
 
-		this.setPlayerNumber(number);
+		//this.setPlayerNumber(number);
 
 		createBody(startPos);
 		
