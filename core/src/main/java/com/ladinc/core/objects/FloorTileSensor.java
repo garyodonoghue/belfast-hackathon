@@ -53,8 +53,8 @@ public class FloorTileSensor {
 		}
 		this.body.createFixture(fixtureDef);
 		
-//		this.body.setUserData(new CollisionInfo("FloorSensor",
-//				CollisionObjectType.FloorSensor, this));
+		this.body.setUserData(new CollisionInfo("FloorSensor",
+				CollisionObjectType.FloorSensor, this));
 		
 		boxShape.dispose();
 	}

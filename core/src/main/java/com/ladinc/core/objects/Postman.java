@@ -59,8 +59,8 @@ public class Postman extends GameCharacter {
 
 		this.body.createFixture(fixtureDef);
 
-		this.body.setUserData(new CollisionInfo("aiplayer",
-				CollisionObjectType.AIPlayer, this));
+		this.body.setUserData(new CollisionInfo("postman",
+				CollisionObjectType.Postman, this));
 	}
 	
 	public void updateMovement(float delta) {
