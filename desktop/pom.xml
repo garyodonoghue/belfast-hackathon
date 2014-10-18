@@ -12,6 +12,14 @@
 	<packaging>jar</packaging>
 	<name>BelfastGC desktop</name>
 
+	<repositories>
+		<repository>
+			<id>in-project</id>
+			<name>In Project Repo</name>
+			<url>file://${project.basedir}/localJars</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<mainClass>com.ladinc.java.BelfastGCDesktop</mainClass>
 	</properties>
