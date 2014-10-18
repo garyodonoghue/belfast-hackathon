@@ -24,6 +24,7 @@ public class FloorTileSensor {
 	
 	public boolean assigned = false;
 	public boolean isBlock = false;
+	public boolean ismailbox = false;
 	//public Team team;
 	
 	public FloorTileSensor(World world, float width, float height,
@@ -51,6 +52,7 @@ public class FloorTileSensor {
 		} else{
 			this.setBlock(false);
 		}
+		this.ismailbox = false;
 		this.body.createFixture(fixtureDef);
 		
 		this.body.setUserData(new CollisionInfo("FloorSensor",
@@ -67,6 +69,14 @@ public class FloorTileSensor {
 		this.isBlock = isBlock;
 	}
 	
+	public boolean isIsmailbox() {
+		return ismailbox;
+	}
+
+	public void setIsmailbox(boolean ismailbox) {
+		this.ismailbox = ismailbox;
+	}
+
 	public static Sprite getSprite(BoxType type)
 	{
 		if (type == BoxType.House)

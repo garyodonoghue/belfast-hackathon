@@ -15,13 +15,20 @@ import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.GameScreen;
+import com.ladinc.core.screens.layouts.PainterLayout;
 
 public class CollisionHelper implements ContactListener{
 	
 	//public Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("hit.mp3"));
 	
 	public CollisionHelper()
-	{		
+	{
+	}
+	
+	public PainterLayout painterLayout;
+	public CollisionHelper(PainterLayout painterLayout)
+	{
+		this.painterLayout = painterLayout;
 	}
 	
 	public boolean newScore = false;
@@ -59,13 +66,14 @@ public class CollisionHelper implements ContactListener{
         		
         		//if the hockey player's sword is disabled, dont kill the enemy
     			if(fts.isBlock)
-    			{
-    				GameScreen.lettersDelivered++;
-    				
-    				//if(fts.ismailbox)
-//    				{
-//    					//mail delivered mthod
-//    				}
+    			{   				
+    				if(fts.ismailbox)
+    				{
+    					//mail delivered mthod
+    					GameScreen.lettersDelivered++;
+    					fts.setIsmailbox(false);
+    					painterLayout.determineMailbox();
+    				}
     			}
         	}
         	else if(checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Postman, CollisionObjectType.Robot))
