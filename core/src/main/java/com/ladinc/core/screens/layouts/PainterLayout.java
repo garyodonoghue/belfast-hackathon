@@ -27,6 +27,7 @@ public class PainterLayout extends GenericLayout {
 	public int awayScore = 0;
 	
 	public ArrayList<FloorTileSensor> floorSensors;
+	public ArrayList<FloorTileSensor> possibleMailBoxes;
 	
 	
 	public PainterLayout(World world, float worldWidth, float worldHeight,
@@ -114,6 +115,14 @@ public class PainterLayout extends GenericLayout {
 				}
 			}
 		}
+		
+		possibleMailBoxes = new ArrayList<FloorTileSensor>();
+		for (FloorTileSensor floorTileSensor : floorSensors) {
+			if(floorTileSensor.isBlock()){
+				possibleMailBoxes.add(floorTileSensor);
+			}
+		}
+		
 		determineMailbox();
 	}
 
@@ -121,12 +130,7 @@ public class PainterLayout extends GenericLayout {
 		//TODO: deactive currentmailbox
 		
 		//setting mailbox
-		ArrayList<FloorTileSensor> possibleMailBoxes = new ArrayList<FloorTileSensor>();
-		for (FloorTileSensor floorTileSensor : floorSensors) {
-			if(floorTileSensor.isBlock()){
-				possibleMailBoxes.add(floorTileSensor);
-			}
-		}
+		
 		ArrayList<Double> listOfMailboxDistances = new ArrayList<Double>();
 		double sum = 0;
 		for (FloorTileSensor possibleMailBox : possibleMailBoxes) {
@@ -148,7 +152,8 @@ public class PainterLayout extends GenericLayout {
 		}
 		
 		Random r = new Random();
-		floorSensors.get(r.nextInt(furtherThanAverageMailBoxes.size()));//set mailbox
+		int a = r.nextInt(furtherThanAverageMailBoxes.size());
+		furtherThanAverageMailBoxes.get(a).setIsmailbox(true);//set mailbox
 		
 		
 	}
@@ -170,6 +175,9 @@ public class PainterLayout extends GenericLayout {
 			if (fts.isBlock)
 			{
 				fts.updateSprite(houseSprite, sp, pixPerMeter);
+				if(fts.ismailbox){
+					fts.updateSprite(mailBox, sp, pixPerMeter);
+				}
 			}
 		}
 	}

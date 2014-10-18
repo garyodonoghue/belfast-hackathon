@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() < 3) { // TODO 4
+		while (this.game.mcm.inActiveControls.size() <1) { // TODO 4
 			// TODO: waiting for all players to join message
 			System.out.println("Waiting for players to join!");
 		}
@@ -204,11 +204,12 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
-		world.setContactListener(new CollisionHelper());
+		
 		buildRobotPositionsMap();
 		createAndAssignControls();
 		
 		createLayout();
+		world.setContactListener(new CollisionHelper(this.layout));
 		
 	}
 
