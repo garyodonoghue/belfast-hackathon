@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
 	
 	private BitmapFont font;
 	private Texture gameOverTexture;
-	private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
+	//private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -208,7 +208,7 @@ public class GameScreen implements Screen {
 
 		getPostmanPositionIPad();
 		
-		wavSound.loop();
+		//wavSound.loop();
 		
 		if(!GAME_OVER){
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,

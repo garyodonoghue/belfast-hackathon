@@ -95,7 +95,7 @@ public class Postman extends GameCharacter {
 	public void canRobotsSeeMe(List<Robot> robots, PainterLayout painterLayout){
 		boolean visible = false;
 		for (Robot robot : robots) {
-			if(painterLayout.getDistance(this.body.getWorldCenter(), robot.body.getWorldCenter()) < 15){
+			if(painterLayout.getDistance(this.body.getWorldCenter(), robot.body.getWorldCenter()) < 20){
 				visible = true;
 			}
 		}
