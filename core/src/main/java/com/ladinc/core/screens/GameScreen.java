@@ -77,6 +77,7 @@ public class GameScreen implements Screen {
 		world.clearForces();
 
 		this.spriteBatch.begin();
+		this.spriteBatch.end();
 
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
