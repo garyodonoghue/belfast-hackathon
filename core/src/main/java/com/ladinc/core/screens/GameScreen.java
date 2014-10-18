@@ -12,8 +12,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
@@ -43,7 +46,7 @@ public class GameScreen implements Screen {
 	public static int lettersDelivered = 0;
 	private final int worldHeight;
 	private final int worldWidth;
-	public static boolean GAME_OVER = false;
+	public static boolean GAME_OVER = true;
 	
 	private BitmapFont font;
 	private Texture gameOverTexture;
@@ -150,7 +153,7 @@ public class GameScreen implements Screen {
 			if(Gdx.input.isButtonPressed(0)){ 
 				System.out.println("reset Game button pressed");
 					GameScreen.GAME_OVER = false;
-					
+					new GameScreen(game);
 			}
 				
 			//resetValues(); //TODO New instance of Game screen
@@ -166,7 +169,9 @@ public class GameScreen implements Screen {
 		world.clearForces();
 
 		postman.updateMovement(delta);
-		
+
+		updatePostmanSprite();
+
 		for(Robot robot : robots){
 			if(robot!=null){
 				robot.updateMovement(delta);
@@ -207,10 +212,35 @@ public class GameScreen implements Screen {
 		
 		buildRobotPositionsMap();
 		createAndAssignControls();
-		
+				
 		createLayout();
-		world.setContactListener(new CollisionHelper(this.layout));
-		
+		world.setContactListener(new CollisionHelper(this.layout));	
 	}
 
+		private void updatePostmanSprite() {
+			//TODO Move this into a map
+			Texture playerTexture = new Texture(
+					Gdx.files.internal("postman.png"));
+			
+			updateSprite(new Sprite(playerTexture), spriteBatch, PIXELS_PER_METER, postman.body);
+	}
+
+		public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
+				int PIXELS_PER_METER, Body body) {
+			if (sprite != null && spriteBatch != null && body != null) {
+				setSpritePosition(sprite, PIXELS_PER_METER, body);
+				sprite.draw(spriteBatch);
+			}
+		}
+		
+		public static void setSpritePosition(Sprite sprite, int PIXELS_PER_METER,
+				Body body) {
+
+			sprite.setPosition(
+					PIXELS_PER_METER * body.getWorldCenter().x - sprite.getWidth()
+							/ 2, PIXELS_PER_METER * body.getWorldCenter().y
+							- sprite.getHeight() / 2);
+
+			sprite.setRotation((MathUtils.radiansToDegrees * body.getAngle()));
+		}	
 }
