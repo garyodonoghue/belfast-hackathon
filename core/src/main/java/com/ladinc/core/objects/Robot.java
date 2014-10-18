@@ -63,7 +63,7 @@ public class Robot extends GameCharacter {
 		this.body.createFixture(fixtureDef);
 
 		this.body.setUserData(new CollisionInfo("robot",
-				CollisionObjectType.AIPlayer, this));
+				CollisionObjectType.Robot, this));
 	}
 
 	public int getNumber() {
