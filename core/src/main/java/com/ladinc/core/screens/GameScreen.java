@@ -1,7 +1,9 @@
 package com.ladinc.core.screens;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
 import com.ladinc.core.collision.CollisionHelper;
+import com.ladinc.core.contorllers.GamePadControls;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.layouts.PainterLayout;
@@ -27,6 +30,7 @@ public class GameScreen implements Screen {
 	private final BelfastGC game;
 	private PainterLayout layout;
 	private Postman postman;
+	private Map<Integer, Vector2> robotPositions;
 	private List<Robot> robots;
 	private final int screenHeight;
 	private final int screenWidth;
@@ -56,6 +60,62 @@ public class GameScreen implements Screen {
 		this.debugRenderer = new Box2DDebugRenderer();
 	}
 
+	private void buildRobotPositionsMap() {
+		robotPositions = new HashMap<Integer, Vector2>();
+
+		Vector2 robot1Pos = new Vector2(70, 80);
+		Vector2 robot2Pos = new Vector2(20, 10);
+		Vector2 robot3Pos = new Vector2(60, 30);
+
+		robotPositions.put(0, robot1Pos);
+		robotPositions.put(1, robot2Pos);
+		robotPositions.put(2, robot3Pos);
+	}
+
+	// this will add a predefined number of robots
+	private void createAndAssignRobotControls() {
+		robots = new ArrayList<Robot>();
+
+		// Loop until all players have joined the game
+		while (this.game.mcm.inActiveControls.size() < 2) { // TODO 4
+			// TODO: waiting for all players to join message
+		}
+
+		// All players have joined!
+		for (int i = 0; i < this.game.mcm.inActiveControls.size(); i++) {
+			if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
+				// assign all the players using controllers to robots, the
+				// person using the ipad will be the postman
+
+				// Get a robot position from our starting positions map
+				Vector2 robotPosition = robotPositions.get(i);
+				Robot robot = new Robot(world, robotPosition, i, camera,
+						this.game.mcm.inActiveControls.get(i));
+				robots.add(robot);
+			}
+		}
+
+		// for (int i = 0; i < NUMBER_OF_ROBOTS; i++) { //TODO Can use this if
+		// we want to dynamically generate robots
+		// Vector2 robot1Pos = new Vector2(70, 80);
+		// Robot robot1 = new Robot(world, robot1Pos, 1, camera,
+		// this.game.mcm.inActiveControls.get(0));
+		//
+		// Vector2 robot2Pos = new Vector2(20, 10);
+		// Robot robot2 = new Robot(world, robot2Pos, 2, camera,
+		// this.game.mcm.inActiveControls.get(0));
+		//
+		// Vector2 robot3Pos = new Vector2(60, 30);
+		// Robot robot3 = new Robot(world, robot3Pos, 3, camera,
+		// this.game.mcm.inActiveControls.get(0));
+		//
+		// robots.add(robot1);
+		// robots.add(robot2);
+		// robots.add(robot3);
+
+		// }
+	}
+
 	private void createLayout() {
 		this.layout = new PainterLayout(world, worldWidth, worldHeight, center,
 				0);
@@ -65,20 +125,6 @@ public class GameScreen implements Screen {
 	private void createPostman() {
 		postman = new Postman(world, center, 0,
 				this.game.mcm.inActiveControls.get(0));
-	}
-
-	// this will add a predefined number of robots
-	private void createRobots() {
-		robots = new ArrayList<Robot>();
-		for (int i = 0; i < NUMBER_OF_ROBOTS; i++) {
-			// TODO generate a random starting position for the robot
-			Vector2 robotPos = new Vector2(50, 50);
-			Robot robot = new Robot(world, robotPos, i, camera,
-					this.game.mcm.inActiveControls.get(0)); // TODO Controller
-															// management needs
-															// work
-			robots.add(robot);
-		}
 	}
 
 	@Override
@@ -143,7 +189,8 @@ public class GameScreen implements Screen {
 		createLayout();
 
 		createPostman();
-		createRobots();
+		buildRobotPositionsMap();
+		createAndAssignRobotControls();
 	}
 
 }
