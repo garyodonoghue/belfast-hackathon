@@ -220,10 +220,12 @@ public class GameScreen implements Screen {
 
 		private void updatePostmanSprite() {
 			//TODO Move this into a map
-			Texture playerTexture = new Texture(
-					Gdx.files.internal("postman.png"));
-			
-			updateSprite(new Sprite(playerTexture), spriteBatch, PIXELS_PER_METER, postman.body);
+			if(postman.isVisible()){ //only draw the postman if he's close to robots
+				Texture playerTexture = new Texture(
+						Gdx.files.internal("postman.png"));
+				
+				updateSprite(new Sprite(playerTexture), spriteBatch, PIXELS_PER_METER, postman.body);
+			}
 	}
 
 		public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
