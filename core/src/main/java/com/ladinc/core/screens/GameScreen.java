@@ -77,11 +77,14 @@ public class GameScreen implements Screen {
 		this.font.setColor(Color.WHITE);
 	}
 	
-	private void getPostmanPositionIPad() {
+	private void getPostmanPositionIPad(PainterLayout painterLayout) {
 		JSONObject obj = new JSONObject();
-		obj.put("postx", this.postman.body.getWorldCenter().x);
-		obj.put("posty", this.postman.body.getWorldCenter().y);
+		obj.put("postx", painterLayout.postman.body.getWorldCenter().x / this.worldWidth);
+		obj.put("posty", painterLayout.postman.body.getWorldCenter().y / this.worldHeight);
+		obj.put("mailboxx", painterLayout.mailboxTile.body.getWorldCenter().x / this.worldWidth);
+		obj.put("mailboxy", painterLayout.mailboxTile.body.getWorldCenter().y / this.worldHeight);
 		this.game.mcm.moreControllers.hearbeatResponses.put("1", obj);
+		System.out.println(painterLayout.mailboxTile.body.getWorldCenter().x + " , " + painterLayout.mailboxTile.body.getWorldCenter().y);
 	}
 
 	private void createLayout() {
@@ -227,7 +230,7 @@ public class GameScreen implements Screen {
 		String scoreText = "Mail Delivered: " + lettersDelivered;
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
 
-		getPostmanPositionIPad();
+		getPostmanPositionIPad(this.layout);
 		
 		//wavSound.loop();
 		

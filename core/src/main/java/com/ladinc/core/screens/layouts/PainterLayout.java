@@ -29,6 +29,8 @@ public class PainterLayout extends GenericLayout {
 	public ArrayList<FloorTileSensor> floorSensors;
 	public ArrayList<FloorTileSensor> possibleMailBoxes;
 	
+	public FloorTileSensor mailboxTile;
+	
 	
 	public PainterLayout(World world, float worldWidth, float worldHeight,
 			Vector2 center, int numberOfInnerWalls, Postman postman) {
@@ -148,6 +150,7 @@ public class PainterLayout extends GenericLayout {
 		Random r = new Random();
 		int a = r.nextInt(furtherThanAverageMailBoxes.size());
 		furtherThanAverageMailBoxes.get(a).setIsmailbox(true);//set mailbox
+		mailboxTile = furtherThanAverageMailBoxes.get(a);
 		
 		
 	}
@@ -193,4 +196,6 @@ public class PainterLayout extends GenericLayout {
 //			}
 		}
 	}
+
+	
 }
