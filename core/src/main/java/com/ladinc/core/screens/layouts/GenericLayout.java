@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
+import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.StartingPosition;
 
 public abstract class GenericLayout implements IGenericLayout {
@@ -18,14 +19,16 @@ public abstract class GenericLayout implements IGenericLayout {
 	private final float playerGapY = 7f;
 	private final float worldWidth;
 	private final float worldHeight;
+	public Postman postman;
 	private final List<BoxProp> walls = new ArrayList<BoxProp>();
 	
 	public GenericLayout(World world, float worldWidth, float worldHeight,
-			Vector2 center, int numberOfInnerWalls) {
+			Vector2 center, int numberOfInnerWalls, Postman postman) {
 		this.worldHeight = worldHeight;
 		this.worldWidth = worldWidth;
 		this.center = center;
 		this.numberOfInnerWalls = numberOfInnerWalls;
+		this.postman = postman;
 		createWorld(world);
 	}
 	

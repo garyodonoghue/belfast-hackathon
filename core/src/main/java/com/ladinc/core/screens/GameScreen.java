@@ -70,6 +70,11 @@ public class GameScreen implements Screen {
 		this.font.setColor(Color.WHITE);
 	}
 
+	private void createLayout() {
+		this.layout = new PainterLayout(world, worldWidth, worldHeight, center,
+				0, postman);
+	}
+	
 	private void buildRobotPositionsMap() {
 		robotPositions = new HashMap<Integer, Vector2>();
 
@@ -111,11 +116,25 @@ public class GameScreen implements Screen {
 		}
 	}
 
-	private void createLayout() {
-		this.layout = new PainterLayout(world, worldWidth, worldHeight, center,
-				0);
+		// for (int i = 0; i < NUMBER_OF_ROBOTS; i++) { //TODO Can use this if
+		// we want to dynamically generate robots
+		// Vector2 robot1Pos = new Vector2(70, 80);
+		// Robot robot1 = new Robot(world, robot1Pos, 1, camera,
+		// this.game.mcm.inActiveControls.get(0));
+		//
+		// Vector2 robot2Pos = new Vector2(20, 10);
+		// Robot robot2 = new Robot(world, robot2Pos, 2, camera,
+		// this.game.mcm.inActiveControls.get(0));
+		//
+		// Vector2 robot3Pos = new Vector2(60, 30);
+		// Robot robot3 = new Robot(world, robot3Pos, 3, camera,
+		// this.game.mcm.inActiveControls.get(0));
+		//
+		// robots.add(robot1);
+		// robots.add(robot2);
+		// robots.add(robot3);
 
-	}
+		// }
 
 	@Override
 	public void dispose() {
@@ -186,11 +205,11 @@ public class GameScreen implements Screen {
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
 		world.setContactListener(new CollisionHelper());
-
-		createLayout();
-		
 		buildRobotPositionsMap();
 		createAndAssignControls();
+		
+		createLayout();
+		
 	}
 
 }
