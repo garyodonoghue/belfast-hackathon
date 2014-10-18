@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
 
 	private void createLayout() {
 		this.layout = new PainterLayout(world, worldWidth, worldHeight, center,
-				0);
+				0, postman);
 
 	}
 
@@ -142,10 +142,10 @@ public class GameScreen implements Screen {
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
 		world.setContactListener(new CollisionHelper());
-
+		createPostman();
 		createLayout();
 
-		createPostman();
+		
 		createRobots();
 	}
 

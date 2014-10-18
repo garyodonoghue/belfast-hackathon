@@ -1,6 +1,7 @@
 package com.ladinc.core.screens.layouts;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.FloorTileSensor;
-import com.ladinc.core.objects.StartingPosition;
+import com.ladinc.core.objects.Postman;
 import com.ladinc.core.utilities.Enums.BoxType;
 
 public class PainterLayout extends GenericLayout {
@@ -27,9 +28,10 @@ public class PainterLayout extends GenericLayout {
 	
 	public ArrayList<FloorTileSensor> floorSensors;
 	
+	
 	public PainterLayout(World world, float worldWidth, float worldHeight,
-			Vector2 center, int numberOfInnerWalls) {
-		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
+			Vector2 center, int numberOfInnerWalls, Postman postman) {
+		super(world, worldWidth, worldHeight, center, numberOfInnerWalls, postman);
 		
 		houseSprite = FloorTileSensor.getSprite(BoxType.House);
 		mailBox = FloorTileSensor.getSprite(BoxType.Mailbox);
@@ -112,6 +114,53 @@ public class PainterLayout extends GenericLayout {
 				}
 			}
 		}
+		determineMailbox();
+	}
+
+	public void determineMailbox() {
+		//TODO: deactive currentmailbox
+		
+		//setting mailbox
+		ArrayList<FloorTileSensor> possibleMailBoxes = new ArrayList<FloorTileSensor>();
+		for (FloorTileSensor floorTileSensor : floorSensors) {
+			if(floorTileSensor.isBlock()){
+				possibleMailBoxes.add(floorTileSensor);
+			}
+		}
+		ArrayList<Double> listOfMailboxDistances = new ArrayList<Double>();
+		double sum = 0;
+		for (FloorTileSensor possibleMailBox : possibleMailBoxes) {
+			Vector2 houseVector = possibleMailBox.body.getWorldCenter();
+			Vector2 playerVector =  postman.body.getWorldCenter();
+			double distance = getDistance(houseVector, playerVector);
+			listOfMailboxDistances.add(distance);
+			sum += distance;
+		}
+		
+		double averageDistance  =  sum / listOfMailboxDistances.size();
+		int f = 0;
+		ArrayList<FloorTileSensor> furtherThanAverageMailBoxes= new ArrayList<FloorTileSensor>();
+		for (Double mailDistance : listOfMailboxDistances) {
+			if(mailDistance > averageDistance){
+				furtherThanAverageMailBoxes.add(possibleMailBoxes.get(f));
+			}
+			f += 1;
+		}
+		
+		Random r = new Random();
+		floorSensors.get(r.nextInt(furtherThanAverageMailBoxes.size()));//set mailbox
+		
+		
+	}
+	
+	// Get distance of a player from the ball, can use this to determine if the
+	// player has control of the ball
+	// Use the formula 'root((x1-x2)2 + (y1-y2)2)' //TODO Confirm this!!
+	public double getDistance(Vector2 house,Vector2 player) {
+		double xDist = ((house.x - player.x) * (house.x - player.x));
+		double yDist = ((house.y - player.y) * (house.y - player.y));
+		double dist = Math.sqrt(xDist + yDist);
+		return dist;
 	}
 	
 	public void drawSpritesForTiles(SpriteBatch sp, int pixPerMeter)
