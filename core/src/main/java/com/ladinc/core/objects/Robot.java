@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
+import com.ladinc.core.contorllers.IControls;
 
 public class Robot extends GameCharacter {
 	private final OrthographicCamera camera;
@@ -18,7 +19,7 @@ public class Robot extends GameCharacter {
 	private final World world;
 
 	public Robot(World world, Vector2 startPos, int number,
-			OrthographicCamera camera) {
+			OrthographicCamera camera, IControls iControls) {
 
 		this.world = world;
 		this.camera = camera;
