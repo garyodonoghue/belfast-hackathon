@@ -21,6 +21,7 @@ public class FloorTileSensor {
 	public Body body;
 	
 	public boolean assigned = false;
+	public boolean isBlock = false;
 	//public Team team;
 	
 	public FloorTileSensor(World world, float width, float height,
@@ -43,12 +44,25 @@ public class FloorTileSensor {
 		fixtureDef.shape = boxShape;
 		fixtureDef.restitution = 0.4f; // positively bouncy!
 		fixtureDef.isSensor = filled;
+		if(!filled){
+			this.setBlock(true);
+		} else{
+			this.setBlock(false);
+		}
 		this.body.createFixture(fixtureDef);
 		
 //		this.body.setUserData(new CollisionInfo("FloorSensor",
 //				CollisionObjectType.FloorSensor, this));
 		
 		boxShape.dispose();
+	}
+
+	public boolean isBlock() {
+		return isBlock;
+	}
+
+	public void setBlock(boolean isBlock) {
+		this.isBlock = isBlock;
 	}
 	
 //	public static Sprite getSprite(Team team)
