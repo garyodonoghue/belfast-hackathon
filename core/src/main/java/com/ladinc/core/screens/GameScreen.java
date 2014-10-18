@@ -9,8 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
+import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.GameCharacter;
 import com.ladinc.core.objects.Postman;
+import com.ladinc.core.screens.layouts.PainterLayout;
 
 public class GameScreen implements Screen {
 
@@ -27,6 +29,8 @@ public class GameScreen implements Screen {
 	private final int worldWidth;
 	
 	private Postman postman;
+	
+	private PainterLayout layout;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -71,7 +75,7 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		camera.zoom = 2f;
+		//camera.zoom = 2f;
 		camera.update();
 		// TODO: spriteBatch.setProjectionMatrix(camera.combined);
 
@@ -104,10 +108,20 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		world = new World(new Vector2(0.0f, 0.0f), true);
+		world.setContactListener(new CollisionHelper());
+		
+		createLayout();
 		
 		createPostman();
+		
 	}
 	
+	private void createLayout() 
+	{
+		this.layout = new PainterLayout(world, worldWidth, worldHeight, center, 0); 
+		
+	}
+
 	private void createPostman()
 	{
 		postman = new Postman(world, center, 0, this.game.mcm.inActiveControls.get(0));
