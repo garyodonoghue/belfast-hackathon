@@ -21,51 +21,16 @@ public abstract class GameCharacter {
 		return null;
 	}
 
-	protected Vector2 attackingPos;
 	public Body body;
-
 	protected OrthographicCamera camera;
-
-	protected Vector2 defendingPos;
-
-	public double distFromBall;
-
-	private boolean hasBall = false;
-
-	private boolean isClosestPlayerToBall = false;
-
-	private final Vector2 leftMovement = new Vector2(0, 0);
-	private int playerNumber;
-
 	float playerSize = 3f;
-
 	public Sprite sprite;
-
 	public World world;
 
 	public abstract void createBody(Vector2 startPos);
 
-	public Vector2 getAttackingPos() {
-		return attackingPos;
-	}
-
-	public Vector2 getDefendingPos() {
-		return defendingPos;
-	}
-
-	public double getDistFromBall() {
-		return distFromBall;
-	}
-
-	public boolean getHasBall() {
-		return hasBall;
-	}
-
-	// When attacking, this method will get the movement of the player towards
-	// some target position on the pithc
-	// When defending, this will either get the moveemnt of the player to the
-	// ball if that player is the closest,
-	// or it will get the movement towards the players target defending position
+	// TODO Could potentially reuse this if we want to move the robots towards
+	// the player
 	public Vector2 getMovemenOfPlayerTowardsTargetDest(Vector2 aiLocation,
 			Vector2 playerLocation) {
 
@@ -80,14 +45,6 @@ public abstract class GameCharacter {
 		return relativeVector;
 	}
 
-	public int getPlayerNumber() {
-		return playerNumber;
-	}
-
-	public boolean isClosestPlayerToBall() {
-		return isClosestPlayerToBall;
-	}
-
 	public float normalizeFloat(float value, float limit) {
 		if (value < 0) {
 			return Math.max(value, -limit);
@@ -95,30 +52,6 @@ public abstract class GameCharacter {
 			return Math.min(value, limit);
 		}
 
-	}
-
-	public void setAttackingPos(Vector2 attackingPos) {
-		this.attackingPos = attackingPos;
-	}
-
-	public void setClosestPlayerToBall(boolean isClosestPlayerToBall) {
-		this.isClosestPlayerToBall = isClosestPlayerToBall;
-	}
-
-	public void setDefendingPos(Vector2 defendingPos) {
-		this.defendingPos = defendingPos;
-	}
-
-	public void setDistFromBall(double d) {
-		this.distFromBall = d;
-	}
-
-	public void setHasBall(boolean hasBall) {
-		this.hasBall = hasBall;
-	}
-
-	public void setPlayerNumber(int playerNumber) {
-		this.playerNumber = playerNumber;
 	}
 
 	public void setSpritePosition(Sprite spr, int PIXELS_PER_METER,
