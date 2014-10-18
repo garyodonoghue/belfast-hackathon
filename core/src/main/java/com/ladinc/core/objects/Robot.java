@@ -11,22 +11,18 @@ import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 
 public class Robot extends GameCharacter {
-	private final Vector2 attackingPos;
 	private final OrthographicCamera camera;
-	private final Vector2 defendingPos;
+	private final int number;
 	private final Object sprite;
+
 	private final World world;
 
-	public Robot(World world, Vector2 startPos, Vector2 attackingPos,
-			Vector2 defendingPos, int number, OrthographicCamera camera) {
+	public Robot(World world, Vector2 startPos, int number,
+			OrthographicCamera camera) {
 
 		this.world = world;
 		this.camera = camera;
-
-		this.attackingPos = attackingPos;
-		this.defendingPos = defendingPos;
-
-		this.setPlayerNumber(number);
+		this.number = number;
 
 		createBody(startPos);
 
@@ -58,8 +54,16 @@ public class Robot extends GameCharacter {
 
 		this.body.createFixture(fixtureDef);
 
-		this.body.setUserData(new CollisionInfo("aiplayer",
+		this.body.setUserData(new CollisionInfo("robot",
 				CollisionObjectType.AIPlayer, this));
+	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public Object getSprite() {
+		return sprite;
 	}
 
 }
