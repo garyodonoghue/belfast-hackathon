@@ -3,7 +3,7 @@ package com.ladinc.core.collision;
 public class CollisionInfo {
 
 	public static enum CollisionObjectType {
-		AIPlayer, Ball, UserPlayer, Wall
+		AIPlayer, Ball, UserPlayer, Wall, FloorSensor, Postman, Robot
 	}
 
 	public Object object;

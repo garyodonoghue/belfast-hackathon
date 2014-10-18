@@ -7,8 +7,10 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -36,10 +38,14 @@ public class GameScreen implements Screen {
 	private final int screenWidth;
 	private final SpriteBatch spriteBatch;
 	private World world;
+	
+	public static int lettersDelivered = 0;
 
 	private final int worldHeight;
 
 	private final int worldWidth;
+	
+	private BitmapFont font;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -58,6 +64,9 @@ public class GameScreen implements Screen {
 		this.spriteBatch = new SpriteBatch();
 
 		this.debugRenderer = new Box2DDebugRenderer();
+		
+		font = new BitmapFont(Gdx.files.internal("Swis-721-50.fnt"), Gdx.files.internal("Swis-721-50.png"), false);
+		this.font.setColor(Color.WHITE);
 	}
 
 	private void buildRobotPositionsMap() {
@@ -163,6 +172,12 @@ public class GameScreen implements Screen {
 		postman.updateMovement(delta);
 
 		this.spriteBatch.begin();
+		
+		layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
+		
+		String scoreText = "Mail Delivered: " + lettersDelivered;
+		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
+		
 		this.spriteBatch.end();
 
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ladinc.core.assets.Assets;
 import com.ladinc.core.contorllers.MyControllerManager;
 import com.ladinc.core.screens.GameScreen;
 
@@ -26,7 +27,7 @@ public class BelfastGC extends Game {
 	@Override
 	public void create() 
 	{
-		
+		Assets.load();
 		this.mcm = new MyControllerManager();
 		createScreens();
 		setScreen(gameScreen);

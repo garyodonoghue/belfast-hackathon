@@ -11,6 +11,10 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
+import com.ladinc.core.objects.FloorTileSensor;
+import com.ladinc.core.objects.Postman;
+import com.ladinc.core.objects.Robot;
+import com.ladinc.core.screens.GameScreen;
 
 public class CollisionHelper implements ContactListener{
 
@@ -51,51 +55,52 @@ public class CollisionHelper implements ContactListener{
         	
         	Gdx.app.debug("beginContact", "between " + bodyAInfo.type.toString() + " and " + bodyBInfo.type.toString());
         	
-//        	if (checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Sword, CollisionObjectType.Enemy))
-//        	{
-//        		AIPlayer enemy;
-//        		HockeyPlayer hp;
-//        		//Enemy has hit a sword
-//        		if(bodyAInfo.type == CollisionObjectType.Enemy)
-//        		{
-//        			enemy = (AIPlayer) bodyAInfo.object;
-//        			hp = (HockeyPlayer) bodyBInfo.object;
-//        		}
-//        		else
-//        		{
-//        			enemy = (AIPlayer) bodyBInfo.object;
-//        			hp = (HockeyPlayer) bodyAInfo.object;
-//        		}
-//        		
-//        		//if the hockey player's sword is disabled, dont kill the enemy
-//    			if(hp.disableSwordTimer==0){
-//    				enemy.toBeKilled = true;
-//    				sound.play(1.0f);
-//    			}
-//        	}
-//        	else if(checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Player, CollisionObjectType.Enemy))
-//        	{
-//        		AIPlayer enemy;
-//        		HockeyPlayer player;
-//        		
-//        		//Enemy has hit a sword
-//        		if(bodyAInfo.type == CollisionObjectType.Enemy)
-//        		{
-//        			enemy = (AIPlayer) bodyAInfo.object;
-//        			player = (HockeyPlayer) bodyBInfo.object;
-//        		}
-//        		else
-//        		{
-//        			enemy = (AIPlayer) bodyBInfo.object;
-//        			player = (HockeyPlayer) bodyAInfo.object;
-//        		}
-//        		
-//        		if(!enemy.toBeKilled)
-//        		{
-//        			//Check if the enemy is already marked to be killed
-//        			player.toBeKilled = true;
-//        		}
-//        	}
+        	if (checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Postman, CollisionObjectType.FloorSensor))
+        	{
+        		Postman postman;
+        		FloorTileSensor fts;
+        		//Enemy has hit a sword
+        		if(bodyAInfo.type == CollisionObjectType.Postman)
+        		{
+        			postman = (Postman) bodyAInfo.object;
+        			fts = (FloorTileSensor) bodyBInfo.object;
+        		}
+        		else
+        		{
+        			postman = (Postman) bodyBInfo.object;
+        			fts = (FloorTileSensor) bodyAInfo.object;
+        		}
+        		
+        		//if the hockey player's sword is disabled, dont kill the enemy
+    			if(fts.isBlock)
+    			{
+    				GameScreen.lettersDelivered++;
+    				
+    				//if(fts.ismailbox)
+//    				{
+//    					//mail delivered mthod
+//    				}
+    			}
+        	}
+        	else if(checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Postman, CollisionObjectType.Robot))
+        	{
+        		Postman postman;
+        		Robot robot;
+        		
+        		//Enemy has hit a sword
+        		if(bodyAInfo.type == CollisionObjectType.Postman)
+        		{
+        			postman = (Postman) bodyAInfo.object;
+        			robot = (Robot) bodyBInfo.object;
+        		}
+        		else
+        		{
+        			postman = (Postman) bodyBInfo.object;
+        			robot = (Robot) bodyAInfo.object;
+        		}
+        		
+        		//Game OVER
+        	}
         }
         
 		
