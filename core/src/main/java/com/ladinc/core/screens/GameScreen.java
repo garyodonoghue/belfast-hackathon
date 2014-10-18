@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
+import com.ladinc.core.contorllers.listeners.MCPListenerClient;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
 import com.ladinc.core.screens.layouts.PainterLayout;
@@ -134,6 +135,8 @@ public class GameScreen implements Screen {
 	private void createPostman() {
 		postman = new Postman(world, center, 0,
 				this.game.mcm.inActiveControls.get(0));
+//		postman = new Postman(world, center, 0,
+//				MCPListenerClient.gpc);
 	}
 
 	@Override
