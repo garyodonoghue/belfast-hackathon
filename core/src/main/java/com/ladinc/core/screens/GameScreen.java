@@ -52,7 +52,9 @@ public class GameScreen implements Screen {
 	public static int lettersDelivered = 0;
 	private final int worldHeight;
 	private final int worldWidth;
-	public static boolean GAME_OVER = true;
+	public static boolean GAME_OVER = false;
+	public static boolean INTRO_SCREEN = true;
+	
 	private Texture postmanTexture;
 	
 	private BitmapFont font;
@@ -64,6 +66,8 @@ public class GameScreen implements Screen {
 	
 	private Sprite bgImage;
 
+	private Texture splashScreenTexture;
+	
 	public GameScreen(BelfastGC game) {
 		this.game = game;
 
@@ -83,6 +87,8 @@ public class GameScreen implements Screen {
 		this.debugRenderer = new Box2DDebugRenderer();
 		
 		this.gameOverTexture = new Texture(Gdx.files.internal("gameOverImg.png"));
+		
+		this.splashScreenTexture = new Texture(Gdx.files.internal("postmanPanic.png"));
 		
 		font = new BitmapFont(Gdx.files.internal("Swis-721-50.fnt"), Gdx.files.internal("Swis-721-50.png"), false);
 		postmanTexture = new Texture(Gdx.files.internal("postman.png"));
@@ -185,8 +191,17 @@ public class GameScreen implements Screen {
 		
 		
 
+		if(INTRO_SCREEN){
+			spriteBatch.draw(splashScreenTexture, 0, 0);
+			
+			if(Gdx.input.isButtonPressed(0)){ 
+				INTRO_SCREEN = false;
+			}
+		}
 		//check for Game Over, if set, play game over sound, reset values 
-		if(GAME_OVER){
+		else {
+			if(GAME_OVER){
+		
 			displayGameOverImage();
 			
 			if(Gdx.input.isButtonPressed(0)){ 
@@ -231,8 +246,6 @@ public class GameScreen implements Screen {
 		this.font.setColor(Color.BLACK);
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
 	}
-		
-		this.spriteBatch.end();
 
 		getPostmanPositionIPad(this.layout);
 		
@@ -242,6 +255,8 @@ public class GameScreen implements Screen {
 //		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 //				PIXELS_PER_METER, PIXELS_PER_METER));
 //		}
+	}
+		this.spriteBatch.end();
 	}
 	private void updateRobotSprites() {
 		for(Robot robot : robots){
