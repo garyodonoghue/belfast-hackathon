@@ -36,7 +36,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 3; // TODO 4
+	private static final int NUMBER_OF_PLAYERS = 1; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -134,7 +134,7 @@ public class GameScreen implements Screen {
 		robots = new ArrayList<Robot>();
 
 		// Loop until all players have joined the game
-		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_ROBOTS) {
+		while (this.game.mcm.inActiveControls.size() < NUMBER_OF_PLAYERS) {
 
 			// TODO: waiting for all players to join message
 			System.out.println("Waiting for players to join!");
