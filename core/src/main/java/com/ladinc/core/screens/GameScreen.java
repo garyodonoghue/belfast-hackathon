@@ -23,9 +23,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.BelfastGC;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
 import com.ladinc.core.contorllers.KeyboardAndMouseControls;
+import com.ladinc.core.contorllers.listeners.MCPListenerClient;
 import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
@@ -34,7 +36,7 @@ import com.ladinc.core.screens.layouts.PainterLayout;
 public class GameScreen implements Screen {
 
 	public static Vector2 center = new Vector2();
-	private static final int NUMBER_OF_ROBOTS = 2; // TODO 4
+	private static final int NUMBER_OF_ROBOTS = 3; // TODO 4
 	private static int PIXELS_PER_METER = 10;
 	private final OrthographicCamera camera;
 	private final Box2DDebugRenderer debugRenderer;
@@ -59,6 +61,8 @@ public class GameScreen implements Screen {
 	private Texture tgtHouseTexture;
 	private Texture normalHouseTexture;
 	private Texture robotTexture;
+	
+	private Sprite bgImage;
 
 	public GameScreen(BelfastGC game) {
 		this.game = game;
@@ -86,6 +90,9 @@ public class GameScreen implements Screen {
 		tgtHouseTexture  = new Texture(Gdx.files.internal("house_target.png"));
 		normalHouseTexture  = new Texture(Gdx.files.internal("house_normal.png"));
 		robotTexture  = new Texture(Gdx.files.internal("robot.png"));
+		
+		bgImage = Art.getSprite(Art.PAINTER_BACKGROUND);
+		bgImage.setPosition(0, 0);
 		
 		this.font.setColor(Color.WHITE);
 	}
@@ -131,11 +138,11 @@ public class GameScreen implements Screen {
 		for (int i = 0; i < this.game.mcm.inActiveControls.size(); i++) {
 			if(this.game.mcm.inActiveControls.get(i).getClass() == KeyboardAndMouseControls.class)
 			{
-				postman = new Postman(world, center, 0,
-						this.game.mcm.inActiveControls.get(i), false);
-				
 //				postman = new Postman(world, center, 0,
-//				MCPListenerClient.gpc, false);
+//						this.game.mcm.inActiveControls.get(i), false);
+				
+				postman = new Postman(world, center, 0,
+				MCPListenerClient.gpc, false);
 			}
 			else if (this.game.mcm.inActiveControls.get(i).getClass() == GamePadControls.class) {
 				// assign all the players using controllers to robots, the
@@ -175,6 +182,8 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		this.spriteBatch.begin();
+		
+		
 
 		//check for Game Over, if set, play game over sound, reset values 
 		if(GAME_OVER){
@@ -190,6 +199,8 @@ public class GameScreen implements Screen {
 			//resetValues(); //TODO New instance of Game screen
 		}
 		else{
+			
+		this.bgImage.draw(spriteBatch);
 		// camera.zoom = 2f;
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
@@ -217,6 +228,7 @@ public class GameScreen implements Screen {
 		//layout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
 		
 		String scoreText = "Mail Delivered: " + lettersDelivered;
+		this.font.setColor(Color.BLACK);
 		this.font.draw(spriteBatch, scoreText, this.screenWidth/2 - this.font.getBounds(scoreText).width/2, 1050);
 	}
 		
@@ -226,10 +238,10 @@ public class GameScreen implements Screen {
 		
 		//wavSound.loop();
 		
-		if(!GAME_OVER){
-		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
-				PIXELS_PER_METER, PIXELS_PER_METER));
-		}
+//		if(!GAME_OVER){
+//		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
+//				PIXELS_PER_METER, PIXELS_PER_METER));
+//		}
 	}
 	private void updateRobotSprites() {
 		for(Robot robot : robots){
@@ -241,7 +253,8 @@ public class GameScreen implements Screen {
 		for(FloorTileSensor floorTile : PainterLayout.floorSensors){
 			if(floorTile.isBlock){
 				if(floorTile.ismailbox){
-					updateSprite(new Sprite(tgtHouseTexture), spriteBatch, PIXELS_PER_METER, floorTile.body);
+					//updateSprite(new Sprite(tgtHouseTexture), spriteBatch, PIXELS_PER_METER, floorTile.body);
+					updateSprite(new Sprite(normalHouseTexture), spriteBatch, PIXELS_PER_METER, floorTile.body);
 				}
 				else{
 					updateSprite(new Sprite(normalHouseTexture), spriteBatch, PIXELS_PER_METER, floorTile.body);
