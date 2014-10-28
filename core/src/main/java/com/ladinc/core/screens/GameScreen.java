@@ -60,6 +60,8 @@ public class GameScreen implements Screen {
 	private BitmapFont font;
 	private Texture gameOverTexture;
 	private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
+	private Sound robotSound = Gdx.audio.newSound(Gdx.files.internal("postman_found.wav"));
+	private boolean robotSoundToPlay = true;
 	private Texture tgtHouseTexture;
 	private Texture normalHouseTexture;
 	private Texture robotTexture;
@@ -302,13 +304,19 @@ public class GameScreen implements Screen {
 		createLayout();
 		world.setContactListener(new CollisionHelper(this.layout));
 		
-		wavSound.loop();
+		//wavSound.loop();
 	}
 
 		private void updatePostmanSprite() {
 			//TODO Move this into a map
 			if(postman.isVisible()){ //only draw the postman if he's close to robots
 				updateSprite(new Sprite(postmanTexture), spriteBatch, PIXELS_PER_METER, postman.body);
+				if(robotSoundToPlay){					
+					robotSoundToPlay = false;
+					robotSound.play();
+				}
+			} else {
+				robotSoundToPlay = true;
 			}
 	}
 
