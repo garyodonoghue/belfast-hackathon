@@ -21,6 +21,10 @@ public class Robot extends GameCharacter {
 	private final World world;
 	public IControls controller;
 
+	public IControls getController() {
+		return controller;
+	}
+
 	public static final int ROBOT_SPEED = 20;
 	
 	public Robot(World world, Vector2 startPos, int number,

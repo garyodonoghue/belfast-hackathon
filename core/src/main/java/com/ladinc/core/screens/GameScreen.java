@@ -28,6 +28,7 @@ import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.contorllers.GamePadControls;
 import com.ladinc.core.contorllers.KeyboardAndMouseControls;
 import com.ladinc.core.contorllers.listeners.MCPListenerClient;
+import com.ladinc.core.movement.MovementHelper;
 import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.Postman;
 import com.ladinc.core.objects.Robot;
@@ -54,6 +55,7 @@ public class GameScreen implements Screen {
 	private final int worldWidth;
 	public static boolean GAME_OVER = false;
 	public static boolean INTRO_SCREEN = true;
+	private MovementHelper movementHelper;
 	
 	private Texture postmanTexture;
 	
@@ -99,6 +101,8 @@ public class GameScreen implements Screen {
 		
 		bgImage = Art.getSprite(Art.PAINTER_BACKGROUND);
 		bgImage.setPosition(0, 0);
+		
+		movementHelper = new MovementHelper();
 		
 		this.font.setColor(Color.WHITE);
 	}
@@ -258,9 +262,15 @@ public class GameScreen implements Screen {
 	}
 	private void updateRobotSprites() {
 		for(Robot robot : robots){
-			updateSprite(new Sprite(new Sprite(robotTexture)), spriteBatch, PIXELS_PER_METER, robot.body);
+			float xMovement = robot.getController().getMovementInput().x;
+			float yMovement = robot.getController().getMovementInput().y;
+			
+			//set the current direction on the robot
+			movementHelper.calculateDirection(xMovement, yMovement, robot);
+			
+			updateSprite(Art.robotSpriteMap.get(robot.getCurrentDirection()), spriteBatch, PIXELS_PER_METER, robot.body);
+			}
 		}
-	}
 
 	private void updateTileSprites() {
 		for(FloorTileSensor floorTile : PainterLayout.floorSensors){
@@ -310,7 +320,7 @@ public class GameScreen implements Screen {
 			if(postman.isVisible()){ //only draw the postman if he's close to robots
 				updateSprite(new Sprite(postmanTexture), spriteBatch, PIXELS_PER_METER, postman.body);
 			}
-	}
+		}
 
 		public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch,
 				int PIXELS_PER_METER, Body body) {

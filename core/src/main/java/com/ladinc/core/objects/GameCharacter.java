@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.movement.MovementHelper.Directions;
 
 public abstract class GameCharacter {
 
@@ -26,6 +27,16 @@ public abstract class GameCharacter {
 	float playerSize = 3f;
 	public Sprite sprite;
 	public World world;
+
+	private Directions currentDirection;
+
+	public Directions getCurrentDirection() {
+		return currentDirection;
+	}
+
+	public void setCurrentDirection(Directions currentDirection) {
+		this.currentDirection = currentDirection;
+	}
 
 	public abstract void createBody(Vector2 startPos);
 
