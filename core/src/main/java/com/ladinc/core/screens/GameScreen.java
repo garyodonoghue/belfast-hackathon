@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
 	
 	private BitmapFont font;
 	private Texture gameOverTexture;
-	//private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
+	private Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("Futuristic music for game.wav"));
 	private Texture tgtHouseTexture;
 	private Texture normalHouseTexture;
 	private Texture robotTexture;
@@ -249,8 +249,6 @@ public class GameScreen implements Screen {
 
 		getPostmanPositionIPad(this.layout);
 		
-		//wavSound.loop();
-		
 //		if(!GAME_OVER){
 //		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 //				PIXELS_PER_METER, PIXELS_PER_METER));
@@ -303,6 +301,8 @@ public class GameScreen implements Screen {
 				
 		createLayout();
 		world.setContactListener(new CollisionHelper(this.layout));
+		
+		wavSound.loop();
 	}
 
 		private void updatePostmanSprite() {
