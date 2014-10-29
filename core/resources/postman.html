@@ -1,0 +1,156 @@
+<html>
+	<head>
+		<title>More-Controllers-Please</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+		
+			<style type="text/css">
+				#outerDiv 
+				{ 
+					overflow: hidden;
+				}
+		
+				#myCanvas 
+				{
+					position: absolute; 
+					top: 0px;
+					left: 0px;
+				} 
+			</style>
+		
+		<script type="text/javascript" src="defaultController.js"></script>
+		<script type="text/javascript" src="canvasHelper.js"></script>
+		<script type="text/javascript" src="stick.js"></script>
+		<script type="text/javascript" src="StickHelper.js"></script>
+		<script type="text/javascript" src="Sprite.js"></script>
+		<script type="text/javascript" src="MCPButton.js"></script>
+	</head>
+
+	<body onLoad="initMCP();">
+		<script type="text/javascript">
+	
+			var x,y,mx,my = 0;
+			var StickHelperObj;
+			var backGroundSprite;
+			var postSprite;
+			var houseSprite;
+			var canvas;
+			
+			function loop()
+			{
+				clearCanvas(canvas.getContext("2d"));
+				backGroundSprite.drawSprite();
+				postSprite.drawSprite();
+				houseSprite.drawSprite();
+				StickHelperObj.drawStick(0.1);
+				
+			}
+			
+			function initMCP()
+			{
+				setInterval(sendHeartbeat, 100);
+			
+				var c = document.getElementById("myCanvas");
+				canvas = c;
+				var nw = window.innerWidth;
+				var nh = window.innerHeight;
+				
+				var ctx = c.getContext("2d");
+				ctx.canvas.width = nw;
+				ctx.canvas.height = nh;
+				
+				StickHelperObj = new StickHelper(c, "stick1", false, "transStick.png");
+				StickHelperObj.stickImage.onload = function () {
+								setInterval( function() {processFunction(StickHelperObj);}, 1);
+								};
+								
+				c.addEventListener("touchstart", 
+									function (e) 
+									{
+										StickHelperObj.handleTouchStart(e);
+										
+										
+									});
+				
+				c.addEventListener("touchmove", 
+									function (e) 
+									{
+										console.log('Handle Move');
+										StickHelperObj.handleTouchMove(e);
+										
+									});
+									
+				c.addEventListener("touchend", 
+									function (e) 
+									{
+										StickHelperObj.handleTouchEnd(e);
+										
+									});
+				
+				backGroundSprite = new Sprite(c, "Background.png", window.innerWidth, window.innerHeight, false);
+				postSprite = new Sprite(c, "post.png", window.innerHeight/18, window.innerHeight/18, true);
+				houseSprite = new Sprite(c, "target.png", window.innerHeight/18, window.innerHeight/18, true);
+				
+				
+				setInterval(loop, 1);
+									
+			}
+			
+			function sendHeartbeat()
+					{
+						var url = "heartbeat?id=" + getId();
+						
+						var xmlhttp
+						if (window.XMLHttpRequest)
+						{
+							xmlhttp=new XMLHttpRequest();
+						}
+						
+						xmlhttp.open("GET",url,true);
+						
+						xmlhttp.onreadystatechange = function()
+						{
+							if (xmlhttp.readyState==4 && xmlhttp.status==200) 
+							{ 
+								handleHeartbeat(xmlhttp.responseText);
+							}
+						}
+						
+						xmlhttp.send();
+					}
+					
+					function handleHeartbeat(respText)
+					{
+						var obj = JSON.parse(respText);
+						
+						if(obj.hasOwnProperty('postx'))
+						{
+							postSprite.setX(obj.postx);
+						}
+						
+						if(obj.hasOwnProperty('posty'))
+						{
+							postSprite.setY(1 - obj.posty);
+						}
+						
+						if(obj.hasOwnProperty('mailboxx'))
+						{
+							houseSprite.setX(obj.mailboxx);
+						}
+						
+						if(obj.hasOwnProperty('mailboxy'))
+						{
+							houseSprite.setY(1 - obj.mailboxy);
+						}
+						
+						//StickHelperObj.updateXY(x,y, mx, my);
+					}
+		</script>
+		
+		<div id="outerDiv">
+			<canvas id="myCanvas" style="border:1px solid #d3d3d3;">
+		
+			</canvas>
+		</div>
+	</body>
+</html>
