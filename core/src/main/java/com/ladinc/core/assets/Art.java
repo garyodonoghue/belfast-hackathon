@@ -1,15 +1,19 @@
 package com.ladinc.core.assets;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ladinc.core.movement.MovementHelper.Directions;
 
 public class Art {
 	public static HashMap<String, Texture> textureTable = new HashMap<String, Texture>();
+	
 	
 //	public static final String GAME_DESCRIPTION_WINDOW = "GAME_DESCRIPTION_WINDOW";
 //	
@@ -53,6 +57,9 @@ public class Art {
 //	public static final String POOL_TABLE = "POOL_TABLE";
 	
 	public static HashMap<String, Sprite> spriteTable = new HashMap<String, Sprite>();
+
+
+public static HashMap<Directions, Sprite> robotSpriteMap;
 	
 	public static void load()
 	{
@@ -66,9 +73,25 @@ public class Art {
 		textureTable.put(PAINTER_BACKGROUND, new Texture(Gdx.files.internal("PainterBackground.png")));
 		textureTable.put(PAINT_TILES, new Texture(Gdx.files.internal("PaintTiles.png")));
 		
+		loadRobotSprite();
 		
 	}
 	
+	private static void loadRobotSprite() {
+		robotSpriteMap = new HashMap<Directions, Sprite>();
+		
+		
+		robotSpriteMap.put(Directions.Up, new Sprite(new Texture(Gdx.files.internal("postman_" + "up.png"))));
+		robotSpriteMap.put(Directions.Down, new Sprite(new Texture(Gdx.files.internal("postman_" + "down.png"))));
+		robotSpriteMap.put(Directions.Left, new Sprite(new Texture(Gdx.files.internal("postman_" + "left.png"))));
+		robotSpriteMap.put(Directions.Right, new Sprite(new Texture(Gdx.files.internal("postman_" + "right.png"))));
+		robotSpriteMap.put(Directions.DiagDownLeft, new Sprite(new Texture(Gdx.files.internal("postman_" + "down_left.png"))));
+		robotSpriteMap.put(Directions.DiagDownRight, new Sprite(new Texture(Gdx.files.internal("postman_" + "down_right.png"))));
+		robotSpriteMap.put(Directions.DiagUpRight, new Sprite(new Texture(Gdx.files.internal("postman_" + "up_right.png"))));
+		robotSpriteMap.put(Directions.DiagUpLeft, new Sprite(new Texture(Gdx.files.internal("postman_" + "up_left.png"))));
+		
+	}
+
 	public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch, int PIXELS_PER_METER, Body body)
 	{
 		if(sprite != null && spriteBatch != null && body != null)
